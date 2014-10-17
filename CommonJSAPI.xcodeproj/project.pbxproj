@@ -1,0 +1,541 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		621BE84B19F104B800A0832A /* LDJSCommandDelegateImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 621BE83A19F104B800A0832A /* LDJSCommandDelegateImpl.m */; };
+		621BE84C19F104B800A0832A /* LDJSCommandQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 621BE83C19F104B800A0832A /* LDJSCommandQueue.m */; };
+		621BE84D19F104B800A0832A /* LDJSDataBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 621BE83E19F104B800A0832A /* LDJSDataBase64.m */; };
+		621BE84E19F104B800A0832A /* LDJSInvokedUrlCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 621BE84019F104B800A0832A /* LDJSInvokedUrlCommand.m */; };
+		621BE84F19F104B800A0832A /* LDJSJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 621BE84219F104B800A0832A /* LDJSJSON.m */; };
+		621BE85019F104B800A0832A /* LDJSPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 621BE84419F104B800A0832A /* LDJSPlugin.m */; };
+		621BE85119F104B800A0832A /* LDJSPluginResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 621BE84619F104B800A0832A /* LDJSPluginResult.m */; };
+		621BE85219F104B800A0832A /* LDJSQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 621BE84819F104B800A0832A /* LDJSQueue.m */; };
+		621BE85319F104B800A0832A /* LDJSService.m in Sources */ = {isa = PBXBuildFile; fileRef = 621BE84A19F104B800A0832A /* LDJSService.m */; };
+		6231946C19EBA32F007FF59D /* LDPBaseWebViewCrtl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6231946B19EBA32F007FF59D /* LDPBaseWebViewCrtl.m */; };
+		6231947019EBA72F007FF59D /* LDPDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 6231946F19EBA72F007FF59D /* LDPDevice.m */; };
+		624DE58019EF906E0029A225 /* LDPUINavCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 624DE57F19EF906E0029A225 /* LDPUINavCtrl.m */; };
+		624DE58D19EF98D50029A225 /* LDPUIGlobalCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 624DE58C19EF98D50029A225 /* LDPUIGlobalCtrl.m */; };
+		624DE59019EFC6120029A225 /* JSAboutCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 624DE58F19EFC6120029A225 /* JSAboutCtrl.m */; };
+		625A8EEC19E78A5D00C0C45C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 625A8EEB19E78A5D00C0C45C /* main.m */; };
+		625A8EEF19E78A5D00C0C45C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 625A8EEE19E78A5D00C0C45C /* AppDelegate.m */; };
+		625A8EF519E78A5D00C0C45C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 625A8EF319E78A5D00C0C45C /* Main.storyboard */; };
+		625A8EF719E78A5D00C0C45C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 625A8EF619E78A5D00C0C45C /* Images.xcassets */; };
+		625A8EFA19E78A5D00C0C45C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 625A8EF819E78A5D00C0C45C /* LaunchScreen.xib */; };
+		625A8F0619E78A5D00C0C45C /* CommonJSAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 625A8F0519E78A5D00C0C45C /* CommonJSAPITests.m */; };
+		62649F6719EE587D00567D49 /* LDPAppInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 62649F6619EE587D00567D49 /* LDPAppInfo.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		625A8F0019E78A5D00C0C45C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 625A8EDE19E78A5C00C0C45C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 625A8EE519E78A5C00C0C45C;
+			remoteInfo = CommonJSAPI;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		621BE83719F104B800A0832A /* LDJSCDV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDJSCDV.h; sourceTree = "<group>"; };
+		621BE83819F104B800A0832A /* LDJSCommandDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDJSCommandDelegate.h; sourceTree = "<group>"; };
+		621BE83919F104B800A0832A /* LDJSCommandDelegateImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDJSCommandDelegateImpl.h; sourceTree = "<group>"; };
+		621BE83A19F104B800A0832A /* LDJSCommandDelegateImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDJSCommandDelegateImpl.m; sourceTree = "<group>"; };
+		621BE83B19F104B800A0832A /* LDJSCommandQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDJSCommandQueue.h; sourceTree = "<group>"; };
+		621BE83C19F104B800A0832A /* LDJSCommandQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDJSCommandQueue.m; sourceTree = "<group>"; };
+		621BE83D19F104B800A0832A /* LDJSDataBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDJSDataBase64.h; sourceTree = "<group>"; };
+		621BE83E19F104B800A0832A /* LDJSDataBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDJSDataBase64.m; sourceTree = "<group>"; };
+		621BE83F19F104B800A0832A /* LDJSInvokedUrlCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDJSInvokedUrlCommand.h; sourceTree = "<group>"; };
+		621BE84019F104B800A0832A /* LDJSInvokedUrlCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDJSInvokedUrlCommand.m; sourceTree = "<group>"; };
+		621BE84119F104B800A0832A /* LDJSJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDJSJSON.h; sourceTree = "<group>"; };
+		621BE84219F104B800A0832A /* LDJSJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDJSJSON.m; sourceTree = "<group>"; };
+		621BE84319F104B800A0832A /* LDJSPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDJSPlugin.h; sourceTree = "<group>"; };
+		621BE84419F104B800A0832A /* LDJSPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDJSPlugin.m; sourceTree = "<group>"; };
+		621BE84519F104B800A0832A /* LDJSPluginResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDJSPluginResult.h; sourceTree = "<group>"; };
+		621BE84619F104B800A0832A /* LDJSPluginResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDJSPluginResult.m; sourceTree = "<group>"; };
+		621BE84719F104B800A0832A /* LDJSQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDJSQueue.h; sourceTree = "<group>"; };
+		621BE84819F104B800A0832A /* LDJSQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDJSQueue.m; sourceTree = "<group>"; };
+		621BE84919F104B800A0832A /* LDJSService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDJSService.h; sourceTree = "<group>"; };
+		621BE84A19F104B800A0832A /* LDJSService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDJSService.m; sourceTree = "<group>"; };
+		6231946A19EBA32F007FF59D /* LDPBaseWebViewCrtl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDPBaseWebViewCrtl.h; sourceTree = "<group>"; };
+		6231946B19EBA32F007FF59D /* LDPBaseWebViewCrtl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDPBaseWebViewCrtl.m; sourceTree = "<group>"; };
+		6231946E19EBA72F007FF59D /* LDPDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LDPDevice.h; path = Plugins/LDPDevice.h; sourceTree = "<group>"; };
+		6231946F19EBA72F007FF59D /* LDPDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LDPDevice.m; path = Plugins/LDPDevice.m; sourceTree = "<group>"; };
+		624DE57E19EF906E0029A225 /* LDPUINavCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LDPUINavCtrl.h; path = Plugins/LDPUINavCtrl.h; sourceTree = "<group>"; };
+		624DE57F19EF906E0029A225 /* LDPUINavCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LDPUINavCtrl.m; path = Plugins/LDPUINavCtrl.m; sourceTree = "<group>"; };
+		624DE58B19EF98D50029A225 /* LDPUIGlobalCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LDPUIGlobalCtrl.h; path = Plugins/LDPUIGlobalCtrl.h; sourceTree = "<group>"; };
+		624DE58C19EF98D50029A225 /* LDPUIGlobalCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LDPUIGlobalCtrl.m; path = Plugins/LDPUIGlobalCtrl.m; sourceTree = "<group>"; };
+		624DE58E19EFC6120029A225 /* JSAboutCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSAboutCtrl.h; sourceTree = "<group>"; };
+		624DE58F19EFC6120029A225 /* JSAboutCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSAboutCtrl.m; sourceTree = "<group>"; };
+		625A8EE619E78A5C00C0C45C /* CommonJSAPI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonJSAPI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		625A8EEA19E78A5D00C0C45C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		625A8EEB19E78A5D00C0C45C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		625A8EED19E78A5D00C0C45C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		625A8EEE19E78A5D00C0C45C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		625A8EF419E78A5D00C0C45C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		625A8EF619E78A5D00C0C45C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		625A8EF919E78A5D00C0C45C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		625A8EFF19E78A5D00C0C45C /* CommonJSAPITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CommonJSAPITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		625A8F0419E78A5D00C0C45C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		625A8F0519E78A5D00C0C45C /* CommonJSAPITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommonJSAPITests.m; sourceTree = "<group>"; };
+		625A8F5719E78FA500C0C45C /* CommonJSAPI_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonJSAPI_Prefix.pch; sourceTree = "<group>"; };
+		62649F6519EE587D00567D49 /* LDPAppInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LDPAppInfo.h; path = Plugins/LDPAppInfo.h; sourceTree = "<group>"; };
+		62649F6619EE587D00567D49 /* LDPAppInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LDPAppInfo.m; path = Plugins/LDPAppInfo.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		625A8EE319E78A5C00C0C45C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		625A8EFC19E78A5D00C0C45C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		621BE83619F104B800A0832A /* LDJSService */ = {
+			isa = PBXGroup;
+			children = (
+				621BE83719F104B800A0832A /* LDJSCDV.h */,
+				621BE83819F104B800A0832A /* LDJSCommandDelegate.h */,
+				621BE83919F104B800A0832A /* LDJSCommandDelegateImpl.h */,
+				621BE83A19F104B800A0832A /* LDJSCommandDelegateImpl.m */,
+				621BE83B19F104B800A0832A /* LDJSCommandQueue.h */,
+				621BE83C19F104B800A0832A /* LDJSCommandQueue.m */,
+				621BE83D19F104B800A0832A /* LDJSDataBase64.h */,
+				621BE83E19F104B800A0832A /* LDJSDataBase64.m */,
+				621BE83F19F104B800A0832A /* LDJSInvokedUrlCommand.h */,
+				621BE84019F104B800A0832A /* LDJSInvokedUrlCommand.m */,
+				621BE84119F104B800A0832A /* LDJSJSON.h */,
+				621BE84219F104B800A0832A /* LDJSJSON.m */,
+				621BE84319F104B800A0832A /* LDJSPlugin.h */,
+				621BE84419F104B800A0832A /* LDJSPlugin.m */,
+				621BE84519F104B800A0832A /* LDJSPluginResult.h */,
+				621BE84619F104B800A0832A /* LDJSPluginResult.m */,
+				621BE84719F104B800A0832A /* LDJSQueue.h */,
+				621BE84819F104B800A0832A /* LDJSQueue.m */,
+				621BE84919F104B800A0832A /* LDJSService.h */,
+				621BE84A19F104B800A0832A /* LDJSService.m */,
+			);
+			path = LDJSService;
+			sourceTree = "<group>";
+		};
+		6231946D19EBA6FB007FF59D /* LDPlugins */ = {
+			isa = PBXGroup;
+			children = (
+				6231946A19EBA32F007FF59D /* LDPBaseWebViewCrtl.h */,
+				6231946B19EBA32F007FF59D /* LDPBaseWebViewCrtl.m */,
+				6231946E19EBA72F007FF59D /* LDPDevice.h */,
+				6231946F19EBA72F007FF59D /* LDPDevice.m */,
+				62649F6519EE587D00567D49 /* LDPAppInfo.h */,
+				62649F6619EE587D00567D49 /* LDPAppInfo.m */,
+				624DE57E19EF906E0029A225 /* LDPUINavCtrl.h */,
+				624DE57F19EF906E0029A225 /* LDPUINavCtrl.m */,
+				624DE58B19EF98D50029A225 /* LDPUIGlobalCtrl.h */,
+				624DE58C19EF98D50029A225 /* LDPUIGlobalCtrl.m */,
+			);
+			name = LDPlugins;
+			sourceTree = "<group>";
+		};
+		625A8EDD19E78A5C00C0C45C = {
+			isa = PBXGroup;
+			children = (
+				625A8EE819E78A5C00C0C45C /* CommonJSAPI */,
+				625A8F0219E78A5D00C0C45C /* CommonJSAPITests */,
+				625A8EE719E78A5C00C0C45C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		625A8EE719E78A5C00C0C45C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				625A8EE619E78A5C00C0C45C /* CommonJSAPI.app */,
+				625A8EFF19E78A5D00C0C45C /* CommonJSAPITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		625A8EE819E78A5C00C0C45C /* CommonJSAPI */ = {
+			isa = PBXGroup;
+			children = (
+				621BE83619F104B800A0832A /* LDJSService */,
+				6231946D19EBA6FB007FF59D /* LDPlugins */,
+				625A8EED19E78A5D00C0C45C /* AppDelegate.h */,
+				625A8EEE19E78A5D00C0C45C /* AppDelegate.m */,
+				625A8EF319E78A5D00C0C45C /* Main.storyboard */,
+				625A8EF619E78A5D00C0C45C /* Images.xcassets */,
+				625A8EF819E78A5D00C0C45C /* LaunchScreen.xib */,
+				625A8EE919E78A5D00C0C45C /* Supporting Files */,
+				624DE58E19EFC6120029A225 /* JSAboutCtrl.h */,
+				624DE58F19EFC6120029A225 /* JSAboutCtrl.m */,
+			);
+			path = CommonJSAPI;
+			sourceTree = "<group>";
+		};
+		625A8EE919E78A5D00C0C45C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				625A8F5719E78FA500C0C45C /* CommonJSAPI_Prefix.pch */,
+				625A8EEA19E78A5D00C0C45C /* Info.plist */,
+				625A8EEB19E78A5D00C0C45C /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		625A8F0219E78A5D00C0C45C /* CommonJSAPITests */ = {
+			isa = PBXGroup;
+			children = (
+				625A8F0519E78A5D00C0C45C /* CommonJSAPITests.m */,
+				625A8F0319E78A5D00C0C45C /* Supporting Files */,
+			);
+			path = CommonJSAPITests;
+			sourceTree = "<group>";
+		};
+		625A8F0319E78A5D00C0C45C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				625A8F0419E78A5D00C0C45C /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		625A8EE519E78A5C00C0C45C /* CommonJSAPI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 625A8F0919E78A5D00C0C45C /* Build configuration list for PBXNativeTarget "CommonJSAPI" */;
+			buildPhases = (
+				625A8EE219E78A5C00C0C45C /* Sources */,
+				625A8EE319E78A5C00C0C45C /* Frameworks */,
+				625A8EE419E78A5C00C0C45C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CommonJSAPI;
+			productName = CommonJSAPI;
+			productReference = 625A8EE619E78A5C00C0C45C /* CommonJSAPI.app */;
+			productType = "com.apple.product-type.application";
+		};
+		625A8EFE19E78A5D00C0C45C /* CommonJSAPITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 625A8F0C19E78A5D00C0C45C /* Build configuration list for PBXNativeTarget "CommonJSAPITests" */;
+			buildPhases = (
+				625A8EFB19E78A5D00C0C45C /* Sources */,
+				625A8EFC19E78A5D00C0C45C /* Frameworks */,
+				625A8EFD19E78A5D00C0C45C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				625A8F0119E78A5D00C0C45C /* PBXTargetDependency */,
+			);
+			name = CommonJSAPITests;
+			productName = CommonJSAPITests;
+			productReference = 625A8EFF19E78A5D00C0C45C /* CommonJSAPITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		625A8EDE19E78A5C00C0C45C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = "庞辉";
+				TargetAttributes = {
+					625A8EE519E78A5C00C0C45C = {
+						CreatedOnToolsVersion = 6.0.1;
+					};
+					625A8EFE19E78A5D00C0C45C = {
+						CreatedOnToolsVersion = 6.0.1;
+						TestTargetID = 625A8EE519E78A5C00C0C45C;
+					};
+				};
+			};
+			buildConfigurationList = 625A8EE119E78A5C00C0C45C /* Build configuration list for PBXProject "CommonJSAPI" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 625A8EDD19E78A5C00C0C45C;
+			productRefGroup = 625A8EE719E78A5C00C0C45C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				625A8EE519E78A5C00C0C45C /* CommonJSAPI */,
+				625A8EFE19E78A5D00C0C45C /* CommonJSAPITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		625A8EE419E78A5C00C0C45C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				625A8EF519E78A5D00C0C45C /* Main.storyboard in Resources */,
+				625A8EFA19E78A5D00C0C45C /* LaunchScreen.xib in Resources */,
+				625A8EF719E78A5D00C0C45C /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		625A8EFD19E78A5D00C0C45C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		625A8EE219E78A5C00C0C45C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				621BE84B19F104B800A0832A /* LDJSCommandDelegateImpl.m in Sources */,
+				624DE58D19EF98D50029A225 /* LDPUIGlobalCtrl.m in Sources */,
+				621BE84C19F104B800A0832A /* LDJSCommandQueue.m in Sources */,
+				625A8EEF19E78A5D00C0C45C /* AppDelegate.m in Sources */,
+				624DE58019EF906E0029A225 /* LDPUINavCtrl.m in Sources */,
+				621BE84E19F104B800A0832A /* LDJSInvokedUrlCommand.m in Sources */,
+				625A8EEC19E78A5D00C0C45C /* main.m in Sources */,
+				62649F6719EE587D00567D49 /* LDPAppInfo.m in Sources */,
+				621BE85219F104B800A0832A /* LDJSQueue.m in Sources */,
+				621BE85319F104B800A0832A /* LDJSService.m in Sources */,
+				624DE59019EFC6120029A225 /* JSAboutCtrl.m in Sources */,
+				621BE84D19F104B800A0832A /* LDJSDataBase64.m in Sources */,
+				6231946C19EBA32F007FF59D /* LDPBaseWebViewCrtl.m in Sources */,
+				621BE84F19F104B800A0832A /* LDJSJSON.m in Sources */,
+				621BE85119F104B800A0832A /* LDJSPluginResult.m in Sources */,
+				6231947019EBA72F007FF59D /* LDPDevice.m in Sources */,
+				621BE85019F104B800A0832A /* LDJSPlugin.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		625A8EFB19E78A5D00C0C45C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				625A8F0619E78A5D00C0C45C /* CommonJSAPITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		625A8F0119E78A5D00C0C45C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 625A8EE519E78A5C00C0C45C /* CommonJSAPI */;
+			targetProxy = 625A8F0019E78A5D00C0C45C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		625A8EF319E78A5D00C0C45C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				625A8EF419E78A5D00C0C45C /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		625A8EF819E78A5D00C0C45C /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				625A8EF919E78A5D00C0C45C /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		625A8F0719E78A5D00C0C45C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		625A8F0819E78A5D00C0C45C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		625A8F0A19E78A5D00C0C45C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = CommonJSAPI/CommonJSAPI_Prefix.pch;
+				INFOPLIST_FILE = CommonJSAPI/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		625A8F0B19E78A5D00C0C45C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = CommonJSAPI/CommonJSAPI_Prefix.pch;
+				INFOPLIST_FILE = CommonJSAPI/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		625A8F0D19E78A5D00C0C45C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = CommonJSAPITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CommonJSAPI.app/CommonJSAPI";
+			};
+			name = Debug;
+		};
+		625A8F0E19E78A5D00C0C45C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = CommonJSAPITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CommonJSAPI.app/CommonJSAPI";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		625A8EE119E78A5C00C0C45C /* Build configuration list for PBXProject "CommonJSAPI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				625A8F0719E78A5D00C0C45C /* Debug */,
+				625A8F0819E78A5D00C0C45C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		625A8F0919E78A5D00C0C45C /* Build configuration list for PBXNativeTarget "CommonJSAPI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				625A8F0A19E78A5D00C0C45C /* Debug */,
+				625A8F0B19E78A5D00C0C45C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		625A8F0C19E78A5D00C0C45C /* Build configuration list for PBXNativeTarget "CommonJSAPITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				625A8F0D19E78A5D00C0C45C /* Debug */,
+				625A8F0E19E78A5D00C0C45C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 625A8EDE19E78A5C00C0C45C /* Project object */;
+}
