@@ -157,8 +157,10 @@
 		    
 		  }
 
-* 通过WebviewDelegate拦截url请求，处理JSAPI中发送的jsbridge://请求
-
+ 
+ 
+ * 通过WebviewDelegate拦截url请求，处理JSAPI中发送的jsbridge://请求
+ 
 
 		- (BOOL)webView:(UIWebView*)theWebView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType
 		{
