@@ -35,7 +35,7 @@
 
 -(void)openWebViewCtroller {
     LDPBaseWebViewCrtl *webviewCtrl = [[LDPBaseWebViewCrtl alloc] init];
-    webviewCtrl.url = @"http://10.232.4.186/LDJSBridge_JS/api.htm";
+    webviewCtrl.url = @"http://10.232.0.201/LDJSBridge_JS/api.htm";
     [self.navigationController pushViewController:webviewCtrl animated:YES];
 }
 

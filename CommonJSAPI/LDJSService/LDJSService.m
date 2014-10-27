@@ -10,6 +10,7 @@
 #import "LDJSCDV.h"
 
 @interface LDJSService () {
+    NSString *_userAgent;
     
 }
 //用来注册用户自定义的插件
@@ -28,6 +29,12 @@
 - (void)__init
 {
     if ((self != nil) && !self.initialized) {
+        //设置当前webview的UserAgent,方便webview注入版本信息
+        _userAgent = [[[UIWebView alloc] init] stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
+        NSString *appVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+        NSString *customUserAgent = [_userAgent stringByAppendingFormat:@" _MAPP_/%@", appVersion];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"UserAgent":customUserAgent}];
+        
         _commandQueue = [[LDJSCommandQueue alloc] initWithService:self];
         _commandDelegate = [[LDJSCommandDelegateImpl alloc] initWithService:self];
         self.pluginsMap = [[NSMutableDictionary alloc] initWithCapacity:2];
@@ -52,6 +59,7 @@
 
 
 - (void)dealloc{
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"UserAgent":_userAgent}];
     [_commandQueue dispose];
     [[self.pluginObjects allValues] makeObjectsPerformSelector:@selector(dispose)];
     [self unRegisterAllPlugins];

@@ -109,7 +109,7 @@
     //加载请求
     if(self.url && ![self.url isEqualToString:@""]){
         NSURL *url = [NSURL URLWithString:self.url];
-        NSURLRequest* appReq = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:20.0];
+        NSURLRequest* appReq = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:20.0];
         [_webview loadRequest:appReq];
     }
 }
