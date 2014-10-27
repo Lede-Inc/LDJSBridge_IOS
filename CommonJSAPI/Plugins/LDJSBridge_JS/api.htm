@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)http://pub.idqqimg.com/qqmobile/qqapi.test.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Mobile JS API Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!-- <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"> -->
+    <style type="text/css" media="screen">
+    	button.btn{
+    		margin: 5px;
+    	}
+    </style>
+</head>
+<body style="background: #fff">
+	<h1 class="text-center">Mobile JS API Demo</h1>
+	<div id="container" class="container">
+	</div>
+	<button class="btn btn-primary" onclick="mappEnv()">mapp	env</button>
+	<hr>
+	<p>device：系统和硬件相关信息</p>
+	<button class="btn btn-primary" onclick="getDevice(1)">isMobileApp</button>检测页面是否在App内<br/>
+    <button class="btn btn-primary" onclick="getDevice(2)">getDeviceInfo</button>获取设备信息<br/>
+	<button class="btn btn-primary" onclick="getDevice(3)">getClientInfo</button>获取客户端信息<br/>
+	<button class="btn btn-primary" onclick="getDevice(4)">getNetworkInfo</button>获取当前网络状况<br/>
+	<button class="btn btn-primary" onclick="getDevice(5)">getWebViewType</button>获取当前页面WebView的类型<br/>
+	<button class="btn btn-primary" onclick="getDevice(6)">connectToWiFi</button>连接wifi:暂不支持<br/>
+	<button class="btn btn-primary" onclick="getDevice(7)">setScreenStatus</button>设置屏幕是否常亮<br/>
+	<hr>
+	<p>app：应用相关接口</p>
+	<button class="btn btn-primary" onclick="getAppInfo(1)">isAppInstalled</button>通过scheme判断指定应用是否已经安装<br/>
+    <button class="btn btn-primary" onclick="getAppInfo(2)">isAppInstalledBatch</button>批量查询应用是否已安装，原理同上<br/>
+	<button class="btn btn-primary" onclick="getAppInfo(3)">launchApp</button>使用schema(iOS)或者包名(android)启动第三方应用<br/>
+	<button class="btn btn-primary" onclick="getAppInfo(4)">launchAppWithTokens</button>启动第三方应用<br/>
+	<hr>
+	<p>UI：界面相关接口</p>
+	在指定target打开url页面<br/>
+	<button class="btn btn-primary" onclick="getUICtrl(1,0)">当前跳转</button>
+	<button class="btn btn-primary" onclick="getUICtrl(1,1)">新开webview跳转</button>
+	<button class="btn btn-primary" onclick="getUICtrl(1,2)">浏览器跳转</button><br/>
+    <button class="btn btn-primary" onclick="getUICtrl(2)">openView</button>iOS:打开指定名字的viewController<br/>
+	<button class="btn btn-primary" onclick="getUICtrl(3)">popBack</button>关闭当前webview<br/>
+	<button class="btn btn-primary" onclick="getUICtrl(4)">returnToAIO</button>返回到打开该webview的AIO<br/>
+	<button class="btn btn-primary" onclick="getUICtrl(4,1)">AIO测试</button><br/>
+	配置webview右上角按钮的标题、点击回调等<br/>
+	<button class="btn btn-primary" onclick="getUICtrl(5,1)">右上角文字按钮</button>
+	<button class="btn btn-primary" onclick="getUICtrl(5,2)">右上角按钮隐藏</button>
+	<button class="btn btn-primary" onclick="getUICtrl(5,3)">右上角icon按钮</button><br/>
+    配置菊花是否可见和样式<br/>
+	<button class="btn btn-primary" onclick="getUICtrl(6,1)">显示菊花</button>
+	<button class="btn btn-primary" onclick="getUICtrl(6,2)">隐藏菊花</button>
+	<button class="btn btn-primary" onclick="getUICtrl(6,3)">设置菊花颜色</button><br/>
+	<button class="btn btn-primary" onclick="getUICtrl(7)">showDialog</button>弹出一个确认框<br/>
+	<button class="btn btn-primary" onclick="getUICtrl(8)">refreshTitle</button>刷新客户端显示的网页标题<br/>
+	<button class="btn btn-primary" onclick="getUICtrl(9)">showActionSheet</button>弹出 ActionSheet<br/>
+    <button class="btn btn-primary" onclick="getUICtrl(10)">pageVisibility</button>查询页面的可见性。<br/>
+	<button class="btn btn-primary" onclick="getUICtrl(12)">showTips</button>弹出文本的toast提示，2秒后消失<br/>
+	<button class="btn btn-primary" onclick="getUICtrl(13)">setWebViewBehavior</button>配置webview的行为<br/>
+    <button class="btn btn-primary" onclick="getUICtrl(14)">showShareMenu</button>唤起分享面板，就是默认情况下点击 WebView 右上角的按钮时弹出的面板<br/>	<hr>
+	<script src="./jsapi.js"></script>
+<script>
+function mappEnv() {
+   alert(JSON.stringify(mapp));
+}
+
+function clear(){
+	$('#textarea').val('');
+	log(location.href);
+}
+
+//调用Device相关接口
+function getDevice(type){
+	switch (type){
+		case 1:
+			mapp.device.isMobileApp(function(result){
+				alert(result);
+			});
+			break;
+		case 2: 
+			mapp.device.getDeviceInfo(function(data){
+				alert("hello:JSCall" + JSON.stringify(data));
+			});
+			break;
+		case 3:
+			mapp.device.getClientInfo(function(data){
+				alert(JSON.stringify(data));
+			});
+			break;
+		case 4:
+			mapp.device.getNetworkInfo(function(data){
+				alert(data);
+			});
+			break;
+		case 5:
+			mapp.device.getWebViewType(function(data){
+				alert(data);
+			});
+			break;
+		case 6:
+			alert("暂不支持");
+			break;
+		case 7:
+			mapp.device.setScreenStatus({ status: prompt("status: ") || 0}, function(data){
+				alert(typeof data + ': ' + JSON.stringify(data));
+			});
+			break;
+	}
+}
+
+//调用应用相关接口
+function getAppInfo(type){
+	switch (type){
+		case 1:
+			mapp.app.isAppInstalled(mapp.android ? 'com.netease.lottery' : 'mlottery', function(data){
+				alert(data);
+			});
+			break;
+		case 2: 
+			mapp.app.isAppInstalledBatch(mapp.android ? ['com.netease.lottery','com.netease.film'] : ['mlottery','mfilm'], function(data){
+				alert('mlottery,mfilm is install: ' + JSON.stringify(data));
+			});
+			break;
+		case 3:
+			mapp.app.launchApp({
+				name: "mlottery"// iOS
+			});
+			break;
+		case 4:
+			mapp.app.launchAppWithTokens({
+				appID: "mlottery",
+				paramsStr: "openid=$OPID$&web_type=1"
+			}, function(data){
+				alert(JSON.stringify(data));
+			});
+			break;
+	}
+}
+
+//调用UI相关接口
+function getUICtrl(type, n){
+	switch (type){
+		case 1:
+			if(n == 0){
+				mapp.ui.openUrl({
+					target: 0,
+					url: 'http://www.baidu.com'
+				});
+			} else if(n==1){
+				mapp.ui.openUrl({
+					target: 1,
+					style: 0,
+					url: 'http://caipiao.163.com'
+				});
+			} else {
+				mapp.ui.openUrl({
+					target: 2,
+					url: 'http://caipiao.163.com'
+				});
+			}
+			break;
+		case 2: 
+			mapp.ui.openView({
+				name: "about", 
+				options: {"title": "js标题"}, 
+				onclose: function(data){ alert(data) }
+			});
+			break;
+		case 3:
+			mapp.ui.popBack();
+			break;
+		case 4:
+			if(n && n  == 1){
+				mapp.ui.openUrl({
+					target: 1,
+					style: 0,
+					url: 'http://10.232.4.186/jsapi/api.htm'
+				});
+			}else {
+				mapp.ui.returnToAIO();
+			}
+			break;
+		case 5:
+			if(n && n > 0){
+				if(n==1){
+					mapp.ui.setActionButton({title: '测试'}, function(){
+						alert('你点击了文字测试按钮');
+					});
+				} else if(n == 2){
+					mapp.ui.setActionButton({hidden: true});
+				} else if(n == 3){
+					mapp.ui.setActionButton({iconID: 1}, function(){
+						alert('你点击了icon测试按钮');
+					});
+				}
+			}
+			/*
+			mapp.ui.setActionButton({title: '测试'});
+			mapp.ui.setActionButton({hidden: true });
+			*/
+			break;
+		case 6:
+			if(n && n>0){
+				if(n == 1){
+					mapp.ui.setLoading({
+						visible: true
+					});
+				} else if(n == 2){
+					mapp.ui.setLoading({
+						visible: false
+					});
+				} else if(n == 3){
+					mapp.ui.setLoading({
+						visible: true,
+						color: [0,0,0]
+					});
+				} else {
+				}
+			}
+			break;
+		case 7:
+			mapp.ui.showDialog({
+				title: '这是标题',
+				text: '这是内容这是内容这是内容这是内容这是内容',
+				needOkBtn: true,
+				needCancelBtn: true,
+				okBtnText: '大胆继续',
+				cancelBtnText: '忍痛离开'
+			}, function(result) {
+				result = JSON.parse(result);
+				if (result.button == 0) {
+					alert('你点击了cancel');
+				} else {
+					alert('你点击了ok');
+				}
+			});
+			break;
+		case 8:
+			document.title = "newTitleTorefresh";
+			mapp.ui.refreshTitle();
+			break;
+		case 9:
+			mapp.ui.showActionSheet({
+				'title' : 'title',
+				'items' : ['item1', 'item2'],
+				'cancel' : 'cancel',
+				'close' : 'close'
+			}, function(result){
+				result = JSON.parse(result);
+				alert('type: ' + result.type + ', index: ' + result.index);
+			});
+			break;
+		case 10:
+			mapp.ui.pageVisibility(function(result) {
+				alert('pageVisibility: ' + result);
+			});
+			break;
+		case 11:
+			mapp.ui.setOnCloseHandler(function(data){
+				alert('ahhh 关不掉: ' + JSON.stringify(data));
+				mapp.ui.popBack();
+			});
+			break;
+		case 12:
+			mapp.ui.showTips({text: "hello"});
+			break;
+		case 13:
+			mapp.ui.setWebViewBehavior({
+				swipeBack:1,
+				actionButton: 1
+			});
+			break;
+		case 14:
+			mapp.ui.showShareMenu();
+			break;
+		case 15:
+			mapp.ui.closeWebViews({exclude: true});
+			break;
+	}
+}
+</script></body></html>

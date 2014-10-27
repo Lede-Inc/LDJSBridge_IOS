@@ -35,7 +35,12 @@
 
 -(void)openWebViewCtroller {
     LDPBaseWebViewCrtl *webviewCtrl = [[LDPBaseWebViewCrtl alloc] init];
-    webviewCtrl.url = @"http://10.232.0.201/LDJSBridge_JS/api.htm";
+    NSString *demohtmlPath = [[NSBundle mainBundle] pathForResource:@"LDJSBridge_JS/api.htm" ofType:nil];
+    if([[NSFileManager defaultManager] fileExistsAtPath:demohtmlPath]){
+        webviewCtrl.url = demohtmlPath;
+    } else {
+        webviewCtrl.url = @"http://10.232.0.201/LDJSBridge_JS/api.htm";
+    }
     [self.navigationController pushViewController:webviewCtrl animated:YES];
 }
 

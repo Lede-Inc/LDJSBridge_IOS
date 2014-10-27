@@ -23,11 +23,10 @@
 		624DE59019EFC6120029A225 /* JSAboutCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 624DE58F19EFC6120029A225 /* JSAboutCtrl.m */; };
 		625A8EEC19E78A5D00C0C45C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 625A8EEB19E78A5D00C0C45C /* main.m */; };
 		625A8EEF19E78A5D00C0C45C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 625A8EEE19E78A5D00C0C45C /* AppDelegate.m */; };
-		625A8EF519E78A5D00C0C45C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 625A8EF319E78A5D00C0C45C /* Main.storyboard */; };
 		625A8EF719E78A5D00C0C45C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 625A8EF619E78A5D00C0C45C /* Images.xcassets */; };
-		625A8EFA19E78A5D00C0C45C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 625A8EF819E78A5D00C0C45C /* LaunchScreen.xib */; };
 		625A8F0619E78A5D00C0C45C /* CommonJSAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 625A8F0519E78A5D00C0C45C /* CommonJSAPITests.m */; };
 		62649F6719EE587D00567D49 /* LDPAppInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 62649F6619EE587D00567D49 /* LDPAppInfo.m */; };
+		62B0A33719FE3D9F0091E539 /* LDJSBridge_JS in Resources */ = {isa = PBXBuildFile; fileRef = 62B0A33619FE3D9F0091E539 /* LDJSBridge_JS */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +84,7 @@
 		625A8F5719E78FA500C0C45C /* CommonJSAPI_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonJSAPI_Prefix.pch; sourceTree = "<group>"; };
 		62649F6519EE587D00567D49 /* LDPAppInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LDPAppInfo.h; path = Plugins/LDPAppInfo.h; sourceTree = "<group>"; };
 		62649F6619EE587D00567D49 /* LDPAppInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LDPAppInfo.m; path = Plugins/LDPAppInfo.m; sourceTree = "<group>"; };
+		62B0A33619FE3D9F0091E539 /* LDJSBridge_JS */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LDJSBridge_JS; path = CommonJSAPI/Plugins/LDJSBridge_JS; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +152,7 @@
 		625A8EDD19E78A5C00C0C45C = {
 			isa = PBXGroup;
 			children = (
+				62B0A33619FE3D9F0091E539 /* LDJSBridge_JS */,
 				625A8EE819E78A5C00C0C45C /* CommonJSAPI */,
 				625A8F0219E78A5D00C0C45C /* CommonJSAPITests */,
 				625A8EE719E78A5C00C0C45C /* Products */,
@@ -291,8 +292,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				625A8EF519E78A5D00C0C45C /* Main.storyboard in Resources */,
-				625A8EFA19E78A5D00C0C45C /* LaunchScreen.xib in Resources */,
+				62B0A33719FE3D9F0091E539 /* LDJSBridge_JS in Resources */,
 				625A8EF719E78A5D00C0C45C /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
