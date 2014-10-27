@@ -146,7 +146,7 @@ function(e) {
 	//如果是ios，返回true；
 	//如果是andorid且支持jsbridge，且当前模块的最小版本支持小于当前appVersion的时候，和ios一样的调用方法；
 	function C(e,n) {
-        return (t.iOS||t.android) && T("mapp." + e + "." + n);
+        return (t.iOS||t.android); //&& T("mapp." + e + "." + n);
     }
 	
 	//invoke
