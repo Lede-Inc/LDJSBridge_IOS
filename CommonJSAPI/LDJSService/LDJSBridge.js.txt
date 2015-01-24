@@ -170,7 +170,7 @@ function(e) {
 		//如果当前版本支持Bridge
 		if (C(e, n)) {
 			//将传进来的所有参数生成一个url字符串；
-            o = "jsbridge://" + encodeURIComponent(e) + "/" + encodeURIComponent(n),
+            o = "ldjsbridge://" + encodeURIComponent(e) + "/" + encodeURIComponent(n),
             i.forEach(function(e, t) {
                 typeof e == "object" && (e = JSON.stringify(e)),
                 t === 0 ? o += "?p=": o += "&p" + t + "=",

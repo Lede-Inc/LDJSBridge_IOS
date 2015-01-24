@@ -7,7 +7,6 @@
 //
 
 #import "LDPAppInfo.h"
-#import "LDJSCDV.h"
 
 @implementation LDPAppInfo
 
@@ -17,7 +16,7 @@
 - (void)isAppInstalled:(LDJSInvokedUrlCommand*)command{
     NSString *appScheme = [command jsonParamForkey:@"scheme"];
     BOOL isInstalled = [self isAppInstalledWithScheme:appScheme];
-    LDJSPluginResult *pluginResult = [LDJSPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isInstalled];
+    LDJSPluginResult *pluginResult = [LDJSPluginResult resultWithStatus:LDJSCommandStatus_OK messageAsBool:isInstalled];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -33,7 +32,7 @@
         [arr_result addObject:[NSNumber numberWithBool:isInstalled]];
     }
     
-    LDJSPluginResult *pluginResult = [LDJSPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:arr_result];
+    LDJSPluginResult *pluginResult = [LDJSPluginResult resultWithStatus:LDJSCommandStatus_OK messageAsArray:arr_result];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 

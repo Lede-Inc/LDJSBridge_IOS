@@ -9,73 +9,86 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@protocol LDJSCommandDelegate;
-@class LDJSCommandQueue;
-@interface LDJSService : NSObject {
-    @protected
-        id <LDJSCommandDelegate> _commandDelegate;
-    @protected
-        LDJSCommandQueue* _commandQueue;
+extern NSString *const LDJSBridgeConnectNotification; //Bridge和webview绑定消息
+extern NSString *const LDJSBridgeCloseNotification; //Bridge和webView断开消息
+extern NSString *const LDJSBridgeWebFinishLoadNotification; //Bridge绑定WebView加载完毕
 
-}
+extern NSString *const JsBridgeServiceTag; //获取Notification的service Tag
 
-//用来定义当前Service操作的webview和delegate
-@property (nonatomic, strong) IBOutlet UIWebView* webView;
-@property (nonatomic, readonly, strong) id <LDJSCommandDelegate> commandDelegate;
-@property (nonatomic, readonly, strong) LDJSCommandQueue* commandQueue;
-
-//用来存储用户注册的自定义的plugin
-@property (nonatomic, readonly, strong) NSMutableDictionary* pluginObjects;
-@property (nonatomic, readonly, strong) NSMutableDictionary* pluginsMap;
-
-
-/*
- *@func 初始化Webview的service
- *@param theWebView 控制的webview
+/**
+ * 用于连接bridgeService的Controller定义是否需要调试
+ * 如果是调试模式，客服端输出关于Native的打印信息
  */
--(id)initWithWebView:(UIWebView *) theWebView;
+@protocol LDJSWebViewBridgeProtocol <NSObject>
 
+@required
+- (BOOL)isDebugMode;
 
-/*
- *@func 处理从webview发过来的的url调用请求
- */
--(void)handleURLFromWebview:(NSString *) urlstring;
+@optional
+- (NSString *)debugChannel;
 
-
-/*
- *@func 用户批量注册自定义的plugins
- *@param pluginDic 用户自定义插件列表 key为自定义插件名称，value为具体的插件类名
- */
--(void)registerPlugins:(NSDictionary *) pluginsDic;
-
-
-/*
- *@func 用户单个注册自定义的plugin
- *@param pluginName 自定义插件名称(跟js的模块相对应)，
- *@param className  插件类名
- */
--(void)registerPlugin:(NSString *)pluginName withPluginClass:(NSString *)className;
-
-
-/*
- *@func 用户注销所有自定义插件
- */
--(BOOL)unRegisterAllPlugins;
-
-/*
- *@func 用户单个注销自定义的plugin
- *@param pluginName 自定义插件名称(跟js的模块相对应)，
- *@param className  插件类名
- */
--(void) unRegisterPlugin:(NSString *)pluginName;
+@end
 
 
 /**
- *@func 以pluginName返回用户自定义插件类的对象
- *@param pluginName 插件自定义名称，不一定时类名称
+ * @class LDJSService
+ * JSBridge服务，提供JS和本地Native代码的连接服务
  */
-- (id)getCommandInstance:(NSString*)pluginName;
+@protocol LDJSCommandDelegate;
+@class LDJSCommandQueue;
+@interface LDJSService : NSObject <UIWebViewDelegate> {
+}
 
+@property (nonatomic, weak) UIWebView* webView;
+@property (nonatomic, weak) id viewController;
+@property (nonatomic, readonly, strong) LDJSCommandQueue* commandQueue;
+@property (nonatomic, readonly, strong) id<LDJSCommandDelegate> commandDelegate;
+
+
+/**
+ * 根据配置文件初始化BridgeService
+ */
+-(id)initBridgeServiceWithConfig:(NSString *)configFile;
+
+
+/**
+ * 打开将BridgeService和webview以及webview所在Controller绑定
+ */
+-(void)connect:(UIWebView *) webView Controller:(id)controller;
+
+
+/**
+ * 关闭bridge服务连接
+ */
+-(void)close;
+
+
+/**
+ * 监测webView是否加载完毕
+ */
+-(void)webReady;
+
+
+/**
+ * 1.根据pluginName 获取plugin的实例
+ * 2.根据pluginShowMethod获取对应的SEL
+ */
+-(id)getPluginInstance:(NSString*)pluginName;
+-(NSString *)realForShowMethod:(NSString *)showMethod;
+
+
+/**
+ * 调用bridge绑定的webview执行JS代码
+ */
+-(void)jsEval:(NSString *)js;
+-(NSString *)jsMainLoopEval:(NSString *)js;
+
+
+/**
+ * 释放JS端监控的事件消息
+ */
+-(void)triggerEvent:(NSString *)type withDetail:(NSDictionary *)detail;
+-(BOOL)webResponsesToEvent:(NSString *)type;
 
 
 @end

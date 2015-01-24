@@ -1,70 +1,60 @@
-/*
- Licensed to the Apache Software Foundation (ASF) under one
- or more contributor license agreements.  See the NOTICE file
- distributed with this work for additional information
- regarding copyright ownership.  The ASF licenses this file
- to you under the Apache License, Version 2.0 (the
- "License"); you may not use this file except in compliance
- with the License.  You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an
- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- KIND, either express or implied.  See the License for the
- specific language governing permissions and limitations
- under the License.
- */
+//
+//  LDJSService.h
+//  CommonJSAPI
+//
+//  Created by 庞辉 on 14-10-13.
+//  Copyright (c) 2014年 庞辉. All rights reserved.
+//
 
 #import <Foundation/Foundation.h>
 
 typedef enum {
-    CDVCommandStatus_NO_RESULT = 0,
-    CDVCommandStatus_OK,
-    CDVCommandStatus_CLASS_NOT_FOUND_EXCEPTION,
-    CDVCommandStatus_ILLEGAL_ACCESS_EXCEPTION,
-    CDVCommandStatus_INSTANTIATION_EXCEPTION,
-    CDVCommandStatus_MALFORMED_URL_EXCEPTION,
-    CDVCommandStatus_IO_EXCEPTION,
-    CDVCommandStatus_INVALID_ACTION,
-    CDVCommandStatus_JSON_EXCEPTION,
-    CDVCommandStatus_ERROR
-} CDVCommandStatus;
+    LDJSCommandStatus_NO_RESULT = 0,
+    LDJSCommandStatus_OK,
+    LDJSCommandStatus_CLASS_NOT_FOUND_EXCEPTION,
+    LDJSCommandStatus_ILLEGAL_ACCESS_EXCEPTION,
+    LDJSCommandStatus_INSTANTIATION_EXCEPTION,
+    LDJSCommandStatus_MALFORMED_URL_EXCEPTION,
+    LDJSCommandStatus_IO_EXCEPTION,
+    LDJSCommandStatus_INVALID_ACTION,
+    LDJSCommandStatus_JSON_EXCEPTION,
+    LDJSCommandStatus_ERROR
+} LDJSCommandStatus;
 
+
+/**
+ * @class LDJSPluginResult
+ * 封装native执行结果
+ */
 @interface LDJSPluginResult : NSObject {}
-
 @property (nonatomic, strong, readonly) NSNumber* status;
 @property (nonatomic, strong, readonly) id message;
-@property (nonatomic, strong)           NSNumber* keepCallback;
-// This property can be used to scope the lifetime of another object. For example,
-// Use it to store the associated NSData when `message` is created using initWithBytesNoCopy.
-@property (nonatomic, strong) id associatedObject;
 
-- (LDJSPluginResult*)init;
-+ (LDJSPluginResult*)resultWithStatus:(CDVCommandStatus)statusOrdinal;
-+ (LDJSPluginResult*)resultWithStatus:(CDVCommandStatus)statusOrdinal messageAsString:(NSString*)theMessage;
-+ (LDJSPluginResult*)resultWithStatus:(CDVCommandStatus)statusOrdinal messageAsArray:(NSArray*)theMessage;
-+ (LDJSPluginResult*)resultWithStatus:(CDVCommandStatus)statusOrdinal messageAsInt:(int)theMessage;
-+ (LDJSPluginResult*)resultWithStatus:(CDVCommandStatus)statusOrdinal messageAsDouble:(double)theMessage;
-+ (LDJSPluginResult*)resultWithStatus:(CDVCommandStatus)statusOrdinal messageAsBool:(BOOL)theMessage;
-+ (LDJSPluginResult*)resultWithStatus:(CDVCommandStatus)statusOrdinal messageAsDictionary:(NSDictionary*)theMessage;
-+ (LDJSPluginResult*)resultWithStatus:(CDVCommandStatus)statusOrdinal messageAsArrayBuffer:(NSData*)theMessage;
-+ (LDJSPluginResult*)resultWithStatus:(CDVCommandStatus)statusOrdinal messageAsMultipart:(NSArray*)theMessages;
-+ (LDJSPluginResult*)resultWithStatus:(CDVCommandStatus)statusOrdinal messageToErrorObject:(int)errorCode;
++ (LDJSPluginResult*)resultWithStatus:(LDJSCommandStatus)statusOrdinal;
++ (LDJSPluginResult*)resultWithStatus:(LDJSCommandStatus)statusOrdinal messageAsString:(NSString*)theMessage;
++ (LDJSPluginResult*)resultWithStatus:(LDJSCommandStatus)statusOrdinal messageAsArray:(NSArray*)theMessage;
++ (LDJSPluginResult*)resultWithStatus:(LDJSCommandStatus)statusOrdinal messageAsInt:(int)theMessage;
++ (LDJSPluginResult*)resultWithStatus:(LDJSCommandStatus)statusOrdinal messageAsDouble:(double)theMessage;
++ (LDJSPluginResult*)resultWithStatus:(LDJSCommandStatus)statusOrdinal messageAsBool:(BOOL)theMessage;
++ (LDJSPluginResult*)resultWithStatus:(LDJSCommandStatus)statusOrdinal messageAsDictionary:(NSDictionary*)theMessage;
++ (LDJSPluginResult*)resultWithStatus:(LDJSCommandStatus)statusOrdinal messageToErrorObject:(int)errorCode;
 
-+ (void)setVerbose:(BOOL)verbose;
-+ (BOOL)isVerbose;
 
-- (void)setKeepCallbackAsBool:(BOOL)bKeepCallback;
-
+/**
+ * 直接封装Native处理结果
+ */
 - (NSString*)argumentsAsJSON;
 
-// These methods are used by the legacy plugin return result method
+
+/**
+ * 将处理状态，和结果一起通过JSON形式封装；
+ */
 - (NSString*)toJSONString;
 
-- (NSString*)toSuccessCallbackString:(NSString*)callbackId;
 
-- (NSString*)toErrorCallbackString:(NSString*)callbackId;
+/**
+ * 将处理结果封装成一个JS执行字符串
+ */
+- (NSString*)toJsCallbackString:(NSString*)callbackId;
 
 @end

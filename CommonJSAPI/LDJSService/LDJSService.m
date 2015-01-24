@@ -7,214 +7,254 @@
 //
 
 #import "LDJSService.h"
-#import "LDJSCDV.h"
+#import "LDJSPluginManager.h"
+#import "LDJSCommandQueue.h"
+#import "LDJSCommandDelegate.h"
+
+NSString *const LDJSBridgeConnectNotification = @"LDJSBridgeConnectNotification";
+NSString *const LDJSBridgeCloseNotification = @"LDJSBridgeCloseNotification";
+NSString *const LDJSBridgeWebFinishLoadNotification = @"LDJSBridgeWebFinishLoadNotification";
+
+NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
+
+//在JS端定义字段回收代码
+#define JsCloseBridge @";if(window.jsonRPC) {window.jsonRPC.close()};"
+#define JsBridgeScheme @"ldjsbridge"
+#define JsBridgeCoreFileName @"LDJSBridge.js" //以text结尾
+
+
 
 @interface LDJSService () {
-    NSString *_userAgent;
-    
+    NSString *_userAgent; //用于记录绑定webview进来的UserAgent
 }
-//用来注册用户自定义的插件
-@property (nonatomic, readwrite, strong) NSMutableDictionary* pluginsMap;
-@property (nonatomic, readwrite, strong) NSMutableDictionary* pluginObjects;
-@property (readwrite, assign) BOOL initialized;
+
+@property (weak, nonatomic) id<UIWebViewDelegate> originDelegate; //记录绑定webView的原始delegate
+@property (strong, nonatomic) LDJSPluginManager *pluginManager;   //本地插件管理器
 
 @end
 
 
-@implementation LDJSService
-@synthesize webView;
-@synthesize pluginObjects, pluginsMap, initialized;
-@synthesize commandDelegate = _commandDelegate;
 
-- (void)__init
-{
-    if ((self != nil) && !self.initialized) {
+@implementation LDJSService
+
+-(id)init {
+    NSAssert(NO, @"Bridge Service must init with plugin config file");
+    return nil;
+}
+
+
+-(id)initBridgeServiceWithConfig:(NSString *)configFile;{
+    self = [super init];
+    if(self){
+        _webView = nil;
+        _viewController = nil;
+        _originDelegate = nil;
+        _pluginManager = [[LDJSPluginManager alloc] initWithConfigFile:configFile];
+        _commandQueue = [[LDJSCommandQueue alloc] initWithService:self];
+        _commandDelegate = [[LDJSCommandDelegateImpl alloc] initWithService:self];
+        
         //设置当前webview的UserAgent,方便webview注入版本信息
         _userAgent = [[[UIWebView alloc] init] stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
         NSString *appVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
         NSString *customUserAgent = [_userAgent stringByAppendingFormat:@" _MAPP_/%@", appVersion];
         [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"UserAgent":customUserAgent}];
-        
-        _commandQueue = [[LDJSCommandQueue alloc] initWithService:self];
-        _commandDelegate = [[LDJSCommandDelegateImpl alloc] initWithService:self];
-        self.pluginsMap = [[NSMutableDictionary alloc] initWithCapacity:2];
-        self.pluginObjects = [[NSMutableDictionary alloc] initWithCapacity:2];
-        self.initialized = YES;
-    }
-}
-
-
-/*
- *@func 初始化Webview的service
- *@param theWebView 控制的webview
- */
--(id)initWithWebView:(UIWebView *) theWebView {
-    self = [super init];
-    if(self) {
-        self.webView = theWebView;
-        [self __init];
     }
     return self;
 }
 
 
-- (void)dealloc{
+-(void) dealloc {
+    [self close];
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"UserAgent":_userAgent}];
     [_commandQueue dispose];
-    [[self.pluginObjects allValues] makeObjectsPerformSelector:@selector(dispose)];
-    [self unRegisterAllPlugins];
 }
 
 
-#pragma mark Plugins Register
+-(void)connect:(UIWebView *)webView Controller:(id)controller {
+    if(webView == self.webView) return;
+    if(self.webView != nil){
+        [self close];
+    }
+    
+    self.viewController = controller;
+    self.webView = webView;
+    self.originDelegate = webView.delegate;
+    self.webView.delegate = self;
+    
+    //注册webViewDelegate的KVO
+    [self registerKVO];
+    
+    //bridge连接成功，通知所有插件获取bridgeService
+    [[NSNotificationCenter defaultCenter] postNotificationName:LDJSBridgeConnectNotification object:self userInfo:@{JsBridgeServiceTag:self}];
+}
+
+
+-(void)close {
+    [self unregisterKVP];
+    if(self.webView == nil) return;
+
+    //bridgeService关闭，通知所有插件断开bridge
+    [[NSNotificationCenter defaultCenter] postNotificationName:LDJSBridgeCloseNotification object:self];
+    
+    //通知JS端关闭回收
+#warning mark fixme
+    [self jsEval:JsCloseBridge];
+    self.webView.delegate = self.originDelegate;
+    self.originDelegate = nil;
+    self.webView = nil;
+    self.viewController = nil;
+}
+
+
+#pragma mark - 执行JS函数
+-(void)jsEval:(NSString *)js {
+    [self performSelectorOnMainThread:@selector(jsEvalIntrnal:) withObject:js waitUntilDone:YES];
+}
+
+
+//直接在主线程中执行
+-(NSString *)jsMainLoopEval:(NSString *)js {
+    return [self jsEvalIntrnal:js];
+}
+
+
+-(NSString *)jsEvalIntrnal:(NSString *)js {
+    if(self.webView){
+        return [self.webView stringByEvaluatingJavaScriptFromString:js];
+    } else {
+        return nil;
+    }
+}
+
+
+
+#pragma mark - 处理事件监听机制 
+#warning mark fixme
+-(void)triggerEvent:(NSString *)type withDetail:(NSDictionary *)detail{
+    [self jsEval:[NSString stringWithFormat:@";window.jsonRPC.nativeEvent.trigger('%@', %@);", type, @"hello"]];
+}
+
+
+-(BOOL)webResponsesToEvent:(NSString *)type{
+    NSString *js = [NSString stringWithFormat:@";window.jsonRPC.nativeEvent.respondsToEvent('%@').toString();", type];
+    NSString *res = [self jsEvalIntrnal:js];
+    return [res isEqualToString:@"true"];
+}
+
+
+
+#pragma mark - 设置debug模式
+-(void) webReady {
+    BOOL isDebug = NO;
+    if([self.viewController respondsToSelector:@selector(isDebugMode)]) {
+        isDebug = [self.viewController isDebugMode];
+    }
+    [self ready:isDebug];
+}
+
+
+- (void)ready:(BOOL)isTestMode {
+    if(isTestMode && [self.viewController respondsToSelector:@selector(debugChannel)]) {
+        [self jsEval:[NSString stringWithFormat:@";window.jsonRPC.setDebugChannel('%@');", [self.viewController performSelector:@selector(debugChannel)]]];
+    }
+    
+    //通知js端Native已经准备完成
+    [self jsEval:[NSString stringWithFormat:@";window.jsonRPC.ready(%@);", [NSNumber numberWithBool:isTestMode]]];
+}
+
+
+
+#pragma mark - KVO
+-(void)registerKVO {
+    if(_webView){
+        [_webView addObserver:self forKeyPath:@"delegate" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
+    }
+}
+
+
+-(void)unregisterKVP{
+    if(_webView){
+        [_webView removeObserver:self forKeyPath:@"delegate"];
+    }
+}
+
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    id newDelegate = change[@"new"];
+    if(object == self.webView && [keyPath isEqualToString:@"delegate"] && newDelegate != self){
+        self.originDelegate = newDelegate;
+        self.webView.delegate = self;
+    }
+}
+
+
+
+#pragma mark webViewDelegate monitor
+- (void)webViewDidStartLoad:(UIWebView *)webView {
+    if(webView != self.webView) return;
+    if([self.originDelegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
+        [self.originDelegate webViewDidStartLoad:webView];
+    }
+    
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    if(webView != self.webView) return;
+    //加载本地的框架JS
+    NSString *path = [[NSBundle mainBundle] pathForResource:JsBridgeCoreFileName ofType:@"txt"];
+    NSString *js = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    [self jsMainLoopEval:js];
+    [[NSNotificationCenter defaultCenter] postNotificationName:LDJSBridgeWebFinishLoadNotification object:self];
+    
+    if([self.originDelegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
+        [self.originDelegate webViewDidFinishLoad:webView];
+    }
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    if(webView != self.webView) return YES;
+    BOOL res = NO;
+    NSURL *url = [request URL];
+    if([[url scheme] isEqualToString:JsBridgeScheme]){
+        [self handleURLFromWebview:[url absoluteString]];
+        return NO;
+    }
+    
+    if([self.originDelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
+        res |= [self.originDelegate webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+    } else {
+        res = YES;
+    }
+    
+    return res;
+}
+
+-(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+    if(webView != self.webView) return;
+    
+    if([self.originDelegate respondsToSelector:@selector(webView:didFailLoadWithError:)]) {
+        [self.originDelegate webView:webView didFailLoadWithError:error];
+    }
+}
+
+
 /*
  *@func 处理从webview发过来的的url调用请求
  */
 -(void)handleURLFromWebview:(NSString *) urlstring {
-    if([urlstring hasPrefix:@"jsbridge://"] &&  self.webView != nil){
-        [_commandQueue fetchCommandsFromUrl:urlstring];
-        [_commandQueue executePending];
+    if([urlstring hasPrefix:JsBridgeScheme] &&  self.webView != nil){
+        [_commandQueue excuteCommandsFromUrl:urlstring];
     }
 }
 
 
-/*
- *@func 用户批量注册自定义的plugins
- *@param pluginDic 用户自定义插件列表 key为自定义插件名称，value为具体的插件类名
- */
--(void)registerPlugins:(NSDictionary *) pluginsDic{
-    if(self.pluginsMap == nil) {
-        self.pluginsMap = [[NSMutableDictionary alloc] initWithCapacity:2];
-    }
-    
-    //检查用户自定义的插件
-    NSEnumerator *enumerator = [pluginsDic keyEnumerator];
-    NSString *key;
-    while(key = [enumerator nextObject]){
-        NSString *className = [pluginsDic objectForKey:key];
-        [self.pluginsMap setObject:className forKey:[key lowercaseString]];
-    }
+- (id)getPluginInstance:(NSString*)pluginName{
+    return [_pluginManager getPluginInstanceByPluginName:pluginName];
 }
 
 
-/*
- *@func 用户单个注册自定义的plugin
- *@param pluginName 自定义插件名称(跟js的模块相对应)，
- *@param className  插件类名
- */
--(void)registerPlugin:(NSString *)pluginName withPluginClass:(NSString *)className{
-    if(pluginName == nil || className == nil) return;
-    
-    if(self.pluginsMap == nil) {
-        self.pluginsMap = [[NSMutableDictionary alloc] initWithCapacity:2];
-    }
-    
-    [self.pluginsMap setObject:className forKey:[pluginName lowercaseString]];
+-(NSString *)realForShowMethod:(NSString *)showMethod{
+    return [_pluginManager realForShowMethod:showMethod];
 }
 
-
-/*
- *@func 用户注销所有自定义插件
- */
--(BOOL)unRegisterAllPlugins {
-    //删除所有生成的对象
-    [self.pluginObjects removeAllObjects];
-    self.pluginObjects = nil;
-    
-    //删除所有注册的插件
-    [self.pluginsMap removeAllObjects];
-    self.pluginsMap = nil;
-    
-    return YES;
-}
-
-
-/*
- *@func 用户单个注销自定义的plugin
- *@param pluginName 自定义插件名称(跟js的模块相对应)，
- *@param className  插件类名
- */
--(void) unRegisterPlugin:(NSString *)pluginName{
-    if(pluginName == nil) return;
-    
-    if(self.pluginsMap){
-        NSString *className = [self.pluginsMap objectForKey:[pluginName lowercaseString]];
-        //如果插件已注册,先删除实例化的对象，再注销插件；
-        if(className != nil && [self removePluginwithClassName:className]){
-            [self.pluginsMap removeObjectForKey:[pluginName lowercaseString]];
-        }//if
-    }//if
-}
-
-
-
-#pragma mark plugin Instance
-/**
- *@func 以pluginName返回用户自定义插件类的对象
- *@param pluginName 插件自定义名称，不一定时类名称
- */
-- (id)getCommandInstance:(NSString*)pluginName{
-    NSString* className = [self.pluginsMap objectForKey:[pluginName lowercaseString]];
-    
-    //插件没有注册
-    if (className == nil) {
-        return nil;
-    }
-    
-    //插件已注册，返回插件实例
-    id obj = [self.pluginObjects objectForKey:className];
-    if (!obj) {
-        obj = [[NSClassFromString(className)alloc] initWithWebView:self.webView];
-        
-        if (obj != nil) {
-            [self addPlugin:obj withClassName:className];
-        } else {
-            NSLog(@"LDJSPlugin class %@ (pluginName: %@) does not exist.", className, pluginName);
-        }
-    }
-    return obj;
-}
-
-
-
-/**
- *@func 生成自定义插件的实例对象
- *@param className 自定义插件的类名称
- */
-- (BOOL)addPlugin:(LDJSPlugin*)plugin withClassName:(NSString*)className{
-    //为plugin设置当前webview所在的ctroller
-    if ([plugin respondsToSelector:@selector(setViewController:)]) {
-        UIViewController *ctrl = nil;
-        if([[self.webView.superview nextResponder] isKindOfClass:[UIViewController class]]){
-            ctrl = (UIViewController *)[self.webView.superview nextResponder];
-        }
-        if(self.webView != nil && ctrl != nil){
-            [plugin setViewController:ctrl];
-        }
-    }
-    
-    if ([plugin respondsToSelector:@selector(setCommandDelegate:)]) {
-        [plugin setCommandDelegate:_commandDelegate];
-    }
-    
-    [self.pluginObjects setObject:plugin forKey:className];
-    [plugin pluginInitialize];
-    
-    return YES;
-}
-
-
-/**
- *@func 注销某个自定义插件
- *@param className 自定义插件的类名称
- */
--(BOOL) removePluginwithClassName:(NSString*)className{
-    LDJSPlugin* obj = [self.pluginObjects objectForKey:className];
-    if (obj != nil) {
-        [self.pluginObjects removeObjectForKey:className];
-        [obj setWebView:nil];
-        obj = nil;
-    }
-    return YES;
-}
 @end
