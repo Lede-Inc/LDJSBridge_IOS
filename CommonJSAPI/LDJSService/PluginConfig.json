@@ -1,5 +1,6 @@
 {
     "update": "http://dynamic.163.com/jsbridge/LDJSBridge.js.txt",
+    "module": "mapp",
     "plugins": [
         {
             "pluginname": "device",
