@@ -18,7 +18,6 @@ NSString *const LDJSBridgeWebFinishLoadNotification = @"LDJSBridgeWebFinishLoadN
 NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
 
 //在JS端定义字段回收代码
-#define JsCloseBridge @";if(window.jsonRPC) {window.jsonRPC.close()};"
 #define JsBridgeScheme @"ldjsbridge"
 #define JsBridgeCoreFileName @"LDJSBridge.js" //以text结尾
 
@@ -95,10 +94,7 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
 
     //bridgeService关闭，通知所有插件断开bridge
     [[NSNotificationCenter defaultCenter] postNotificationName:LDJSBridgeCloseNotification object:self];
-    
-    //通知JS端关闭回收
-#warning mark fixme
-    [self jsEval:JsCloseBridge];
+
     self.webView.delegate = self.originDelegate;
     self.originDelegate = nil;
     self.webView = nil;
@@ -124,42 +120,6 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
     } else {
         return nil;
     }
-}
-
-
-
-#pragma mark - 处理事件监听机制 
-#warning mark fixme
--(void)triggerEvent:(NSString *)type withDetail:(NSDictionary *)detail{
-    [self jsEval:[NSString stringWithFormat:@";window.jsonRPC.nativeEvent.trigger('%@', %@);", type, @"hello"]];
-}
-
-
--(BOOL)webResponsesToEvent:(NSString *)type{
-    NSString *js = [NSString stringWithFormat:@";window.jsonRPC.nativeEvent.respondsToEvent('%@').toString();", type];
-    NSString *res = [self jsEvalIntrnal:js];
-    return [res isEqualToString:@"true"];
-}
-
-
-
-#pragma mark - 设置debug模式
--(void) webReady {
-    BOOL isDebug = NO;
-    if([self.viewController respondsToSelector:@selector(isDebugMode)]) {
-        isDebug = [self.viewController isDebugMode];
-    }
-    [self ready:isDebug];
-}
-
-
-- (void)ready:(BOOL)isTestMode {
-    if(isTestMode && [self.viewController respondsToSelector:@selector(debugChannel)]) {
-        [self jsEval:[NSString stringWithFormat:@";window.jsonRPC.setDebugChannel('%@');", [self.viewController performSelector:@selector(debugChannel)]]];
-    }
-    
-    //通知js端Native已经准备完成
-    [self jsEval:[NSString stringWithFormat:@";window.jsonRPC.ready(%@);", [NSNumber numberWithBool:isTestMode]]];
 }
 
 

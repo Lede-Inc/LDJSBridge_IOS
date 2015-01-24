@@ -167,7 +167,6 @@
  */
 - (void)webViewDidFinishLoad:(UIWebView*)theWebView{
     NSLog(@"Finished load of: %@", theWebView.request.URL);
-    [_bridgeService webReady];
 }
 
 - (void)webView:(UIWebView*)theWebView didFailLoadWithError:(NSError*)error{

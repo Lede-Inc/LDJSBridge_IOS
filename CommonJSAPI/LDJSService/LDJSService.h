@@ -64,12 +64,6 @@ extern NSString *const JsBridgeServiceTag; //获取Notification的service Tag
 
 
 /**
- * 监测webView是否加载完毕
- */
--(void)webReady;
-
-
-/**
  * 1.根据pluginName 获取plugin的实例
  * 2.根据pluginShowMethod获取对应的SEL
  */
@@ -82,13 +76,5 @@ extern NSString *const JsBridgeServiceTag; //获取Notification的service Tag
  */
 -(void)jsEval:(NSString *)js;
 -(NSString *)jsMainLoopEval:(NSString *)js;
-
-
-/**
- * 释放JS端监控的事件消息
- */
--(void)triggerEvent:(NSString *)type withDetail:(NSDictionary *)detail;
--(BOOL)webResponsesToEvent:(NSString *)type;
-
 
 @end
