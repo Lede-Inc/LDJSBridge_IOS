@@ -1,4 +1,5 @@
 {
+    "update": "http://dynamic.163.com/jsbridge/LDJSBridge.js.txt",
     "plugins": [
         {
             "pluginname": "device",

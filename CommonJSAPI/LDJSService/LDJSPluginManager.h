@@ -63,4 +63,10 @@
  */
 -(NSString *)realForShowMethod:(NSString *)showMethod;
 
+
+/**
+ * 从本地获取核心JS字符串
+ */
+-(NSString *)localCoreBridgeJSCode;
+
 @end

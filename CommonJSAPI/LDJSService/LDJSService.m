@@ -19,7 +19,6 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
 
 //在JS端定义字段回收代码
 #define JsBridgeScheme @"ldjsbridge"
-#define JsBridgeCoreFileName @"LDJSBridge.js" //以text结尾
 
 
 
@@ -160,9 +159,8 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     if(webView != self.webView) return;
-    //加载本地的框架JS
-    NSString *path = [[NSBundle mainBundle] pathForResource:JsBridgeCoreFileName ofType:@"txt"];
-    NSString *js = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    //加载本地的框架JScode
+    NSString *js = [_pluginManager localCoreBridgeJSCode];
     [self jsMainLoopEval:js];
     [[NSNotificationCenter defaultCenter] postNotificationName:LDJSBridgeWebFinishLoadNotification object:self];
     
