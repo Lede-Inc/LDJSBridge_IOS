@@ -75,17 +75,17 @@ static const double MAX_EXECUTION_TIME = .008; // Half of a 60fps frame.
     }
     
     //获取调用插件名
-    NSString *className = @"";
+    NSString *pluginName = @"";
     if(host && ![host isEqualToString:@""]){
-        className = (NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)host, CFSTR(""), kCFStringEncodingUTF8));
+        pluginName = (NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)host, CFSTR(""), kCFStringEncodingUTF8));
     }
     
     //获取调用方法名，规定第一个host为方法名
-    NSString *methodName = @"";
+    NSString *methodShowName = @"";
     if(paths && paths.count >=2 &&
        [[paths objectAtIndex:0] isEqualToString:@"/"] &&
        ![[paths objectAtIndex:1] isEqualToString:@""]){
-        methodName = (NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)[paths objectAtIndex:1], CFSTR(""), kCFStringEncodingUTF8));
+        methodShowName = (NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)[paths objectAtIndex:1], CFSTR(""), kCFStringEncodingUTF8));
     }
     
     //获取通过URL query对象传进来的参数
@@ -161,7 +161,7 @@ static const double MAX_EXECUTION_TIME = .008; // Half of a 60fps frame.
     
     
     //组装command
-    NSString *queuedCommandsJSON = [NSString stringWithFormat:@"[[\"%@\",\"%@\",\"%@\",[%@],[%@]]]", callIndex,className,methodName, str_comparams?:@"", str_jsonparams?:@""];
+    NSString *queuedCommandsJSON = [NSString stringWithFormat:@"[[\"%@\",\"%@\",\"%@\",[%@],[%@]]]", callIndex,pluginName,methodShowName, str_comparams?:@"", str_jsonparams?:@""];
     [self enqueueCommandBatch:queuedCommandsJSON];
 }
 
