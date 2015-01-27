@@ -47,6 +47,8 @@ extern NSString *const JsBridgeServiceTag; //获取Notification的service Tag
 
 /**
  * 根据配置文件初始化BridgeService
+ * 引用时需要拷贝插件配置文件（PluginConfig.json）文件作为示例编写，初始化时指定文件名
+ * 在插件配置文件中指定核心JS的下载地址，本地文件名也必须和这个名保持一致
  */
 -(id)initBridgeServiceWithConfig:(NSString *)configFile;
 

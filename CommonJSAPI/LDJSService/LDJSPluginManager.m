@@ -7,8 +7,7 @@
 //
 
 #import "LDJSPluginManager.h"
-#define JsBridgeCoreFileName @"LDJSBridge.js" //以text结尾
-
+#define JsBridgeCoreFileName @"LDJSBridge.js.txt" //核心JS文件默认为这个名字
 @implementation LDJSExportDetail
 @end
 
@@ -26,6 +25,7 @@
 
 @interface LDJSPluginManager () {
     NSString *_updateUrl;
+    NSString *_coreBridgeJSFileName;
     BOOL _isUpdate;
 }
 @property (strong, nonatomic) NSMutableDictionary *pluginMap;
@@ -42,6 +42,7 @@
         _pluginMap = [[NSMutableDictionary alloc] init];
         _isUpdate = NO;
         _updateUrl = nil;
+        _coreBridgeJSFileName = nil;
     }
     return self;
 }
@@ -65,7 +66,14 @@
     if(path) {
         NSData *data = [NSData dataWithContentsOfFile:path];
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        //以更新url的文件作为核心JS文件的命名
         _updateUrl = [dict objectForKey:@"update"];
+        if(_updateUrl != nil && ![_updateUrl isEqualToString:@""]){
+            _coreBridgeJSFileName = [_updateUrl lastPathComponent];
+        } else {
+            _coreBridgeJSFileName = JsBridgeCoreFileName;
+        }
+        
         NSArray *plugins = [dict objectForKey:@"plugins"];
         for (NSDictionary *plugin in plugins) {
             LDJSPluginInfo *info = [[LDJSPluginInfo alloc] init];
@@ -163,7 +171,7 @@
             NSString *localJSCode = [self localCoreBridgeJSCode];
             if(onlineJSCode.length != localJSCode.length ||
                ![onlineJSCode isEqualToString:localJSCode]){
-                NSString *cacheBridgeFilePath = [[self bridgeCacheDir] stringByAppendingFormat:@"/%@.txt", JsBridgeCoreFileName];
+                NSString *cacheBridgeFilePath = [[self bridgeCacheDir] stringByAppendingFormat:@"/%@", _coreBridgeJSFileName];
                 NSLog(@"bridgeFilePath:%@", cacheBridgeFilePath);
                 [responseData writeToFile:cacheBridgeFilePath atomically:YES];
             }
@@ -184,8 +192,8 @@
     NSError *error = nil;
     NSString *jsBrideCodeStr = @"";
     
-    NSString *cacheBridgeFilePath = [[self bridgeCacheDir] stringByAppendingFormat:@"/%@.txt", JsBridgeCoreFileName];
-    NSString *bundleBridgeFilePath = [[NSBundle mainBundle] pathForResource:JsBridgeCoreFileName ofType:@"txt"];
+    NSString *cacheBridgeFilePath = [[self bridgeCacheDir] stringByAppendingFormat:@"/%@", _coreBridgeJSFileName];
+    NSString *bundleBridgeFilePath = [[NSBundle mainBundle] pathForResource:_coreBridgeJSFileName ofType:nil];
     //如果cache无此文件
     if(![fileManager fileExistsAtPath:cacheBridgeFilePath]){
         if(![fileManager copyItemAtPath:bundleBridgeFilePath toPath:cacheBridgeFilePath error:&error]){
