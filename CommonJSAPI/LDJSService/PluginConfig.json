@@ -1,0 +1,31 @@
+{
+    "update": "http://dynamic.163.com/jsbridge/LDJSBridge.js.txt",
+    "module": "mapp",
+    "plugins": [
+        {
+            "pluginname": "device",
+            "pluginclass": "LDPDevice",
+            "exports": [
+                {
+                    "showmethod": "getDeviceInfo",
+                    "realmethod": "getDeviceInfo"
+                }
+            ]
+        },
+        {
+            "pluginname": "app",
+            "pluginclass": "LDPAppInfo",
+            "exports": []
+        },
+        {
+            "pluginname": "nav",
+            "pluginclass": "LDPUINavCtrl",
+            "exports": []
+        },
+        {
+            "pluginname": "ui",
+            "pluginclass": "LDPUIGlobalCtrl",
+            "exports": []
+        }
+    ]
+}

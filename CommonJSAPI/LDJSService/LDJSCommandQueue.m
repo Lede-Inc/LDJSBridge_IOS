@@ -7,30 +7,33 @@
 //
 
 #include <objc/message.h>
+#import "LDJSJSON.h"
+#import "LDJSQueue.h"
+#import "LDJSInvokedUrlCommand.h"
 #import "LDJSCommandQueue.h"
-#import "LDJSCDV.h"
 
-// Parse JS on the main thread if it's shorter than this.
-static const NSInteger JSON_SIZE_FOR_MAIN_THREAD = 4 * 1024; // Chosen arbitrarily.
-// Execute multiple commands in one go until this many seconds have passed.
+#import "LDJSPlugin.h"
+#import "LDJSService.h"
+
+//启用主线程执行最小command长度
+static const NSInteger JSON_SIZE_FOR_MAIN_THREAD = 4 * 1024;
+//一次执行命令的最长允许执行时间
 static const double MAX_EXECUTION_TIME = .008; // Half of a 60fps frame.
+
 
 @interface LDJSCommandQueue () {
     __weak LDJSService* _jsService;
-    NSMutableArray* _queue;
-    NSTimeInterval _startExecutionTime;
+    NSMutableArray* _queue;  //js调用命令存储
+    NSTimeInterval _startExecutionTime; //存储开始执行时间
 }
 @end
 
+
+
 @implementation LDJSCommandQueue
 
-- (BOOL)currentlyExecuting
-{
-    return _startExecutionTime > 0;
-}
 
-- (id)initWithService:(LDJSService *)jsService
-{
+-(id)initWithService:(LDJSService *)jsService{
     self = [super init];
     if (self != nil) {
         _jsService = jsService;
@@ -39,110 +42,103 @@ static const double MAX_EXECUTION_TIME = .008; // Half of a 60fps frame.
     return self;
 }
 
-- (void)dispose
-{
-    // TODO(agrieve): Make this a zeroing weak ref once we drop support for 4.3.
+-(void)dealloc{
+    _jsService = nil;
+    [_queue removeAllObjects];
+    _queue = nil;
+}
+
+
+- (void)dispose{
     _jsService = nil;
 }
 
-//参数构成：[["Device590967717","Device","getDeviceInfo",[]]]
-/*
- * urlstr构成：
- * 1.调用普通接口：
- *   mapp.invoke("ns","method"),
- *   jsbridge://device/getNetworkInfo#7
- *
- * 2.调用有返回值的接口：
- *   mapp.invoke("ns","method",function(){}),
- *
- * 3.调用有异步回调的接口：
- *   mapp.invoke("ns","method",{})
- *   jsbridge://device/setScreenStatus?p={"status":"1","callback":"__MQQ_CALLBACK_12"}#13
- *
- * 4.有多个参数的调用：
- */
-//从识别url中加入参数
--(void) fetchCommandsFromUrl:(NSString *)urlstr{
-    //去掉scheme
-    NSString *queuedCommandsJSON = @"";
-    NSRange rg = [urlstr rangeOfString:@"://"];
-    urlstr = [urlstr substringFromIndex:(rg.location + rg.length)];
+
+- (BOOL)currentlyExecuting{
+    return _startExecutionTime > 0;
+}
+
+
+
+-(void) excuteCommandsFromUrl:(NSString *)urlstr{
+    NSURL *commandURL = [NSURL URLWithString:urlstr];
+    NSString *host = commandURL.host;
+    NSArray *paths = commandURL.pathComponents;
+    NSString *query = commandURL.query;
+    NSString *fragement = commandURL.fragment;
     
-    //去掉＃
-    NSArray *arr_headAndfoot = [urlstr componentsSeparatedByString:@"#"];
-    NSString *callIndex = @"";
-    if(arr_headAndfoot.count >= 2) {
-        callIndex = [arr_headAndfoot objectAtIndex:1];
+    //获取url回调函数的index
+    __block NSString *callIndex = @"";
+    if(fragement && ![fragement isEqualToString:@""] &&
+       [fragement intValue] > 0){
+        callIndex = fragement;
     }
-    NSString *mcontent = [arr_headAndfoot objectAtIndex:0];
-    NSArray *arr_qmark = [mcontent componentsSeparatedByString:@"?"];
     
-    //切割类和方法, class和method在js中作了urlencode
-    NSString *str_classAndmethod = [arr_qmark objectAtIndex:0];
-    NSArray *arr_classAndmethod = [str_classAndmethod componentsSeparatedByString:@"/"];
-    NSString *className = (NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef) [arr_classAndmethod objectAtIndex:0], CFSTR(""), kCFStringEncodingUTF8));
-    NSString *methodName = (NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef) [arr_classAndmethod objectAtIndex:1], CFSTR(""), kCFStringEncodingUTF8));
+    //获取调用插件名
+    NSString *pluginName = @"";
+    if(host && ![host isEqualToString:@""]){
+        pluginName = (NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)host, CFSTR(""), kCFStringEncodingUTF8));
+    }
     
+    //获取调用方法名，规定第一个host为方法名
+    NSString *methodShowName = @"";
+    if(paths && paths.count >=2 &&
+       [[paths objectAtIndex:0] isEqualToString:@"/"] &&
+       ![[paths objectAtIndex:1] isEqualToString:@""]){
+        methodShowName = (NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)[paths objectAtIndex:1], CFSTR(""), kCFStringEncodingUTF8));
+    }
     
-    //如果url有参数，切割传入的参数
+    //获取通过URL query对象传进来的参数
     NSMutableArray *arr_params = nil;
-    NSMutableDictionary *dic_params = nil;
-    if(arr_qmark.count >= 2){
-        NSString *str_param = [arr_qmark objectAtIndex:1];
-        NSLog(@"%@", str_param);
-        
-        //分割&参数
-        NSArray *arr_andMark = [str_param componentsSeparatedByString:@"&"];
-        if(arr_andMark.count > 0){
+    if(query && query.length > 0){
+        NSArray *queryParas = [query componentsSeparatedByString:@"&"];
+        if(queryParas && queryParas.count > 0){
             arr_params = [[NSMutableArray alloc] initWithCapacity:4];
-            for(NSString *str_param in arr_andMark){
+            for(NSString *queryObjStr in queryParas){
                 //分割p参数,每一个参数都进行了urlDecode
-                NSArray *arr_qualMark = [str_param componentsSeparatedByString:@"="];
+                NSArray *arr_qualMark = [queryObjStr componentsSeparatedByString:@"="];
                 if(arr_qualMark.count == 2){
                     NSString *value_param = (NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef) [arr_qualMark objectAtIndex:1], CFSTR(""), kCFStringEncodingUTF8));
                     [arr_params addObject:value_param];
                 }//if
             }//for
         }
+    }
+    
         
-        
-        //遍历参数数组，检查json参数，作二级分析
-        if(arr_params.count > 0){
-            NSEnumerator *iterator = [arr_params objectEnumerator];
-            id tmpObj;
-            while (tmpObj = [iterator nextObject]) {
-                if([tmpObj cdv_JSONObject] == nil){
-                    continue;
-                }
-                
-                NSDictionary *tmp_dic =(NSDictionary *)[tmpObj cdv_JSONObject];
-                NSArray *keys = [tmp_dic allKeys];
-                if(keys.count > 0 && dic_params == nil){
-                    dic_params = [[NSMutableDictionary alloc] initWithCapacity:2];
-                }
-                
-                //拷贝key和对应的value
-                for(int j = 0; j < [keys count]; j++){
-                    NSString *key = [keys objectAtIndex:j];
-                    if([[key lowercaseString] isEqualToString:@"callback"]){
-                        callIndex = [tmp_dic objectForKey:key];
-                    } else {
-                        [dic_params setObject:[tmp_dic objectForKey:key] forKey:[key lowercaseString]];
-                    }
-                }
-                
-                //处理完删除该参数
-                [arr_params removeObject:tmpObj];
+    //遍历参数数组，检查json参数, 记录JSon参数供使用
+    NSMutableDictionary *dic_params = nil;
+    if(arr_params && arr_params.count > 0){
+        for(NSString *paramStr in arr_params){
+            if([paramStr cdv_JSONObject] == nil){
+                continue;
             }
+            
+            NSDictionary *tmp_dic = (NSDictionary *)[paramStr cdv_JSONObject];
+            if(tmp_dic && [tmp_dic allKeys].count > 0 &&
+               dic_params == nil){
+                dic_params = [[NSMutableDictionary alloc] initWithCapacity:2];
+            }
+            
+            //便利JSON参数
+            [tmp_dic enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+                if([[key lowercaseString] isEqualToString:@"callback"]){
+                    callIndex = obj;
+                }
+                
+                [dic_params setObject:obj forKey:key];
+            }];
+            
+            //从param中删除参数
+            [arr_params removeObject:paramStr];
         }
-        
     }//if
     
     
     
     
     //组装p参数
-    NSString *str_comparams = @"[";
+    NSString *str_comparams = @"";
     if(arr_params && arr_params.count > 0){
         for(int j=0; j< arr_params.count; j++){
             id obj_param = [arr_params objectAtIndex:j];
@@ -154,7 +150,6 @@ static const double MAX_EXECUTION_TIME = .008; // Half of a 60fps frame.
             str_comparams = [str_comparams stringByAppendingFormat:@"\"%@\"%@", obj_param,(j==arr_params.count-1?@"":@",")];
         }
     }
-    str_comparams = [str_comparams stringByAppendingString:@"]"];
     
     
     //组装json参数
@@ -166,19 +161,18 @@ static const double MAX_EXECUTION_TIME = .008; // Half of a 60fps frame.
     
     
     //组装command
-    queuedCommandsJSON = [queuedCommandsJSON stringByAppendingFormat:@"[[\"%@\", \"%@\", \"%@\",%@,[%@]]]", callIndex,className,methodName, str_comparams, str_jsonparams];
+    NSString *queuedCommandsJSON = [NSString stringWithFormat:@"[[\"%@\",\"%@\",\"%@\",[%@],[%@]]]", callIndex,pluginName,methodShowName, str_comparams?:@"", str_jsonparams?:@""];
     [self enqueueCommandBatch:queuedCommandsJSON];
 }
 
 
-- (void)enqueueCommandBatch:(NSString*)batchJSON
-{
+- (void)enqueueCommandBatch:(NSString*)batchJSON{
     if ([batchJSON length] > 0) {
         NSMutableArray* commandBatchHolder = [[NSMutableArray alloc] init];
         [_queue addObject:commandBatchHolder];
         if ([batchJSON length] < JSON_SIZE_FOR_MAIN_THREAD) {
-            NSLog(@"%@", batchJSON);
             [commandBatchHolder addObject:[batchJSON cdv_JSONObject]];
+            [self executePending];
         } else {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^() {
                 NSMutableArray* result = [batchJSON cdv_JSONObject];
@@ -193,20 +187,16 @@ static const double MAX_EXECUTION_TIME = .008; // Half of a 60fps frame.
 
 
 
-- (void)executePending
-{
-    // Make us re-entrant-safe.
+- (void)executePending{
     if (_startExecutionTime > 0) {
         return;
     }
     @try {
         _startExecutionTime = [NSDate timeIntervalSinceReferenceDate];
-        
         while ([_queue count] > 0) {
             NSMutableArray* commandBatchHolder = _queue[0];
             NSMutableArray* commandBatch = nil;
             @synchronized(commandBatchHolder) {
-                // If the next-up command is still being decoded, wait for it.
                 if ([commandBatchHolder count] == 0) {
                     break;
                 }
@@ -215,28 +205,17 @@ static const double MAX_EXECUTION_TIME = .008; // Half of a 60fps frame.
             
             while ([commandBatch count] > 0) {
                 @autoreleasepool {
-                    // Execute the commands one-at-a-time.
                     NSArray* jsonEntry = [commandBatch cdv_dequeue];
                     if ([commandBatch count] == 0) {
                         [_queue removeObjectAtIndex:0];
                     }
                     LDJSInvokedUrlCommand* command = [LDJSInvokedUrlCommand commandFromJson:jsonEntry];
-                    NSLog(@"Exec(%@): Calling %@.%@", command.callbackId, command.className, command.methodName);
-                    
                     if (![self execute:command]) {
-#ifdef DEBUG
-                        NSString* commandJson = [jsonEntry cdv_JSONString];
-                        static NSUInteger maxLogLength = 1024;
-                        NSString* commandString = ([commandJson length] > maxLogLength) ?
-                        [NSString stringWithFormat:@"%@[...]", [commandJson substringToIndex:maxLogLength]] :
-                        commandJson;
-                        
-                        NSLog(@"FAILED pluginJSON = %@", commandString);
-#endif
+                         NSLog(@"Exec(%@) failure: Calling %@.%@", command.callbackId, command.pluginName, command.pluginShowMethod);
                     }
                 }
                 
-                // Yield if we're taking too long.
+                //如果当前有多个命令，当前命令执行太久，不再继续执行命令
                 if (([_queue count] > 0) && ([NSDate timeIntervalSinceReferenceDate] - _startExecutionTime > MAX_EXECUTION_TIME)) {
                     [self performSelector:@selector(executePending) withObject:nil afterDelay:0];
                     return;
@@ -249,36 +228,33 @@ static const double MAX_EXECUTION_TIME = .008; // Half of a 60fps frame.
     }
 }
 
-- (BOOL)execute:(LDJSInvokedUrlCommand*)command
-{
-    if ((command.className == nil) || (command.methodName == nil)) {
-        NSLog(@"ERROR: Classname and/or methodName not found for command.");
+
+
+- (BOOL)execute:(LDJSInvokedUrlCommand*)command{
+    if ((command.pluginName == nil) || (command.pluginShowMethod == nil)) {
+        NSLog(@"ERROR: pluginName and/or pluginShowMethod not found for command.");
         return NO;
     }
     
-    // Fetch an instance of this class
-    LDJSPlugin* obj = [_jsService.commandDelegate getCommandInstance:command.className];
-    
-    if (!([obj isKindOfClass:[LDJSPlugin class]])) {
-        NSLog(@"ERROR: Plugin '%@' not found, or is not a LDJSPlugin. Check your plugin mapping in config.xml.", command.className);
+    //从当前BridgeService中的插件管理器中获取插件实例
+    LDJSPlugin* obj = [_jsService getPluginInstance:command.pluginName];
+    if (!obj || !([obj isKindOfClass:[LDJSPlugin class]])) {
+        NSLog(@"ERROR: Plugin '%@' not found, or is not a LDJSPlugin. Check your plugin mapping in PluginConfig.json.", command.pluginName);
         return NO;
     }
+    
     BOOL retVal = YES;
     double started = [[NSDate date] timeIntervalSince1970] * 1000.0;
-    // Find the proper selector to call.
-    NSString* methodName = [NSString stringWithFormat:@"%@:", command.methodName];
-    SEL normalSelector = NSSelectorFromString(methodName);
-    if ([obj respondsToSelector:normalSelector]) {
-        // [obj performSelector:normalSelector withObject:command];
+    SEL normalSelector = NSSelectorFromString([_jsService realForShowMethod:command.pluginShowMethod]);
+    if (normalSelector && [obj respondsToSelector:normalSelector]) {
         ((void (*)(id, SEL, id))objc_msgSend)(obj, normalSelector, command);
     } else {
-        // There's no method to call, so throw an error.
-        NSLog(@"ERROR: Method '%@' not defined in Plugin '%@'", methodName, command.className);
+        NSLog(@"ERROR: Method '%@' not defined in Plugin '%@'", command.pluginShowMethod, command.pluginName);
         retVal = NO;
     }
     double elapsed = [[NSDate date] timeIntervalSince1970] * 1000.0 - started;
-    if (elapsed > 10) {
-        NSLog(@"THREAD WARNING: ['%@'] took '%f' ms. Plugin should use a background thread.", command.className, elapsed);
+    if (elapsed > 2*1000.0) {
+        NSLog(@"THREAD WARNING: ['%@'] took '%f' ms. Plugin should use a background thread.", command.pluginName, elapsed);
     }
     return retVal;
 }

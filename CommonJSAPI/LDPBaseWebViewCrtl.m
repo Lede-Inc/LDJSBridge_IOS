@@ -15,7 +15,7 @@
 @interface LDPBaseWebViewCrtl ()<UIWebViewDelegate> {
     UIWebView* _webview;
     UIActivityIndicatorView *_activityView;
-    LDJSService* _jsService;
+    LDJSService* _bridgeService;
     int _shareType;
 }
 
@@ -90,21 +90,11 @@
     
     
     //注册插件Service
-    if(_jsService == nil){
-        _jsService = [[LDJSService alloc] initWithWebView:_webview];
+    if(_bridgeService == nil){
+        _bridgeService = [[LDJSService alloc] initBridgeServiceWithConfig:@"PluginConfig.json"];
     }
+    [_bridgeService connect:_webview Controller:self];
     
-
-    //批量测试
-//    NSDictionary *pluginsDic = [NSDictionary dictionaryWithObjects:ARR_PLUGINS_CLASS forKeys:ARR_PLUGINS_KEY];
-//    [_jsService registerPlugins:pluginsDic];
-//    [_jsService unRegisterAllPlugins];
-    
-    //单个注册测试
-    [_jsService registerPlugin:@"device" withPluginClass:@"LDPDevice"];
-    [_jsService registerPlugin:@"app" withPluginClass:@"LDPAppInfo"];
-    [_jsService registerPlugin:@"nav" withPluginClass:@"LDPUINavCtrl"];
-    [_jsService registerPlugin:@"ui" withPluginClass:@"LDPUIGlobalCtrl"];
     
     //加载请求
     if(self.url && ![self.url isEqualToString:@""]){
@@ -115,8 +105,8 @@
 }
 
 -(void) dealloc {
-    [_jsService unRegisterAllPlugins];
-    _jsService = nil;
+    [_bridgeService close];
+    _bridgeService = nil;
     _webview = nil;
 }
 
@@ -186,17 +176,7 @@
 - (BOOL)webView:(UIWebView*)theWebView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType
 {
     NSURL* url = [request URL];
-    NSLog(@"url:::::%@", [url absoluteString]);
-    
-    /*
-     * Execute any commands queued with cordova.exec() on the JS side.
-     * The part of the URL after gap:// is irrelevant.
-     */
-    if([[url scheme] isEqualToString:@"jsbridge"]){
-        [_jsService handleURLFromWebview:[url absoluteString]];
-        return NO;
-    }
-    
+    NSLog(@"url:::::%@", [url absoluteString]);    
     return YES;
 }
 

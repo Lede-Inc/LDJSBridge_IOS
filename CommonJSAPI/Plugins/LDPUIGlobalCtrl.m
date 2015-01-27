@@ -7,7 +7,6 @@
 //
 
 #import "LDPUIGlobalCtrl.h"
-#import "LDJSCDV.h"
 #import "LDPBaseWebViewCrtl.h"
 
 #define TAG_ACTIONSHEET 987000002
@@ -62,11 +61,11 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     if(actionSheet.tag == TAG_ACTIONSHEET){
         int type = buttonIndex <= 1?0:1;
-        int index = buttonIndex <= 1?-1:buttonIndex-2;
+        long index = buttonIndex <= 1?-1:buttonIndex-2;
         NSString *callBackId = [[NSUserDefaults standardUserDefaults] objectForKey:NOTI_ACTIONSHEET];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:NOTI_ACTIONSHEET];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        LDJSPluginResult *result = [LDJSPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:type],@"type",[NSNumber numberWithInt:index],@"index", nil]];
+        LDJSPluginResult *result = [LDJSPluginResult resultWithStatus:LDJSCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:type],@"type",[NSNumber numberWithLong:index],@"index", nil]];
         if(callBackId && ![callBackId isEqualToString:@""]){
             [self.commandDelegate sendPluginResult:result callbackId:callBackId];
         }
@@ -81,7 +80,7 @@
  */
 -(void)pageVisibility:(LDJSInvokedUrlCommand *)command{
     BOOL hidden = self.viewController.view.hidden;
-    LDJSPluginResult *result = [LDJSPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:hidden?NO:YES];
+    LDJSPluginResult *result = [LDJSPluginResult resultWithStatus:LDJSCommandStatus_OK messageAsBool:hidden?NO:YES];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 

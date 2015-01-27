@@ -1,41 +1,30 @@
-/*
- Licensed to the Apache Software Foundation (ASF) under one
- or more contributor license agreements.  See the NOTICE file
- distributed with this work for additional information
- regarding copyright ownership.  The ASF licenses this file
- to you under the Apache License, Version 2.0 (the
- "License"); you may not use this file except in compliance
- with the License.  You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an
- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- KIND, either express or implied.  See the License for the
- specific language governing permissions and limitations
- under the License.
- */
+//
+//  LDJSCommandQueue.h
+//  CommonJSAPI
+//
+//  Created by 庞辉 on 14-10-13.
+//  Copyright (c) 2014年 庞辉. All rights reserved.
+//
 
 #import "LDJSInvokedUrlCommand.h"
 #import "LDJSJSON.h"
-#import "LDJSDataBase64.h"
+
+
 
 @implementation LDJSInvokedUrlCommand
-
 @synthesize jsonParams = _jsonParams;
 @synthesize arguments = _arguments;
 @synthesize callbackId = _callbackId;
-@synthesize className = _className;
-@synthesize methodName = _methodName;
+@synthesize pluginName = _pluginName;
+@synthesize pluginShowMethod = _pluginShowMethod;
 
-+ (LDJSInvokedUrlCommand*)commandFromJson:(NSArray*)jsonEntry
-{
+#pragma mark init
++ (LDJSInvokedUrlCommand*)commandFromJson:(NSArray*)jsonEntry{
     return [[LDJSInvokedUrlCommand alloc] initFromJson:jsonEntry];
 }
 
-- (id)initFromJson:(NSArray*)jsonEntry
-{
+
+- (id)initFromJson:(NSArray*)jsonEntry{
     id tmp = [jsonEntry objectAtIndex:0];
     NSString* callbackId = tmp == [NSNull null] ? nil : tmp;
     NSString* className = [jsonEntry objectAtIndex:1];
@@ -60,20 +49,20 @@
             Arguments:(NSArray*)arguments
              callbackId:(NSString*)callbackId
               className:(NSString*)className
-             methodName:(NSString*)methodName
-{
+             methodName:(NSString*)methodName{
     self = [super init];
     if (self != nil) {
         _jsonParams = jsonParams;
         _arguments = arguments;
         _callbackId = callbackId;
-        _className = className;
-        _methodName = methodName;
+        _pluginName = className;
+        _pluginShowMethod = methodName;
     }
     
     return self;
 }
 
+#pragma mark - 获取JSON参数
 -(id)jsonParamForkey: (NSString *)key {
     return [self jsonParamForkey:key withDefault:nil];
 }
@@ -97,19 +86,18 @@
 }
 
 
-
-- (id)argumentAtIndex:(NSUInteger)index
-{
+#pragma mark - 获取Array参数
+- (id)argumentAtIndex:(NSUInteger)index{
     return [self argumentAtIndex:index withDefault:nil];
 }
 
-- (id)argumentAtIndex:(NSUInteger)index withDefault:(id)defaultValue
-{
+
+- (id)argumentAtIndex:(NSUInteger)index withDefault:(id)defaultValue{
     return [self argumentAtIndex:index withDefault:defaultValue andClass:nil];
 }
 
-- (id)argumentAtIndex:(NSUInteger)index withDefault:(id)defaultValue andClass:(Class)aClass
-{
+
+- (id)argumentAtIndex:(NSUInteger)index withDefault:(id)defaultValue andClass:(Class)aClass{
     if (index >= [_arguments count]) {
         return defaultValue;
     }

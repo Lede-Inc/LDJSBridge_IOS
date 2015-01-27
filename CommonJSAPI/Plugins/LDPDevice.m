@@ -8,7 +8,6 @@
 
 #include <sys/types.h>
 #include <sys/sysctl.h>
-#import "LDJSCDV.h"
 #import "LDPDevice.h"
 
 typedef enum {
@@ -55,7 +54,7 @@ typedef enum {
     [deviceProperties setObject:[device modelVersion] forKey:@"modelVersion"];
     [deviceProperties setObject:[self uniqueAppInstanceIdentifier] forKey:@"identifier"];
     
-    LDJSPluginResult* pluginResult = [LDJSPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithDictionary:deviceProperties]];
+    LDJSPluginResult* pluginResult = [LDJSPluginResult resultWithStatus:LDJSCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithDictionary:deviceProperties]];
     
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
@@ -70,7 +69,7 @@ typedef enum {
     [clientInfos setObject:[bundleDic objectForKey:@"CFBundleShortVersionString"] forKey:@"appVersion"];
     [clientInfos setObject:[bundleDic objectForKey:@"CFBundleVersion"] forKey:@"appBuild"];
     
-    LDJSPluginResult *pluginResult = [LDJSPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:clientInfos];
+    LDJSPluginResult *pluginResult = [LDJSPluginResult resultWithStatus:LDJSCommandStatus_OK messageAsDictionary:clientInfos];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -113,7 +112,7 @@ typedef enum {
     
     
     
-    LDJSPluginResult *pluginResult = [LDJSPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:netType];
+    LDJSPluginResult *pluginResult = [LDJSPluginResult resultWithStatus:LDJSCommandStatus_OK messageAsInt:netType];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -121,7 +120,7 @@ typedef enum {
  *@func 获取webview类型
  */
 - (void)getWebViewType:(LDJSInvokedUrlCommand*)command {
-    LDJSPluginResult *pluginResult = [LDJSPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:1];
+    LDJSPluginResult *pluginResult = [LDJSPluginResult resultWithStatus:LDJSCommandStatus_OK messageAsInt:1];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -160,7 +159,7 @@ typedef enum {
     [dic_result setObject:[NSNumber numberWithInt:curStatus] forKey:@"result"];
     [dic_result setObject:(curStatus == 0 ? @"当前屏幕处于不长亮状态":@"当前屏幕处于常亮状态") forKey:@"message"];
     
-    LDJSPluginResult* pluginResult = [LDJSPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithDictionary:dic_result]];
+    LDJSPluginResult* pluginResult = [LDJSPluginResult resultWithStatus:LDJSCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithDictionary:dic_result]];
     
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }

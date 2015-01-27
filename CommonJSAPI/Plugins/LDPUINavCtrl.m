@@ -7,7 +7,6 @@
 //
 
 #import "LDPUINavCtrl.h"
-#import "LDJSCDV.h"
 #import "LDPBaseWebViewCrtl.h"
 #import "JSAboutCtrl.h"
 
@@ -107,8 +106,8 @@
  */
 -(void)returnToAIO:(LDJSInvokedUrlCommand *)command{
     NSArray *navViewCtrls = self.viewController.navigationController.viewControllers;
-    NSLog(@"%d",navViewCtrls.count);
-    for(int i = navViewCtrls.count-1; i>=0; i--){
+    int num = (int)navViewCtrls.count;
+    for(int i = num-1; i>=0; i--){
         UIViewController *tmp_ctrl = [navViewCtrls objectAtIndex:i];
         if([tmp_ctrl isKindOfClass:[LDPBaseWebViewCrtl class]]){
             continue;
@@ -142,8 +141,8 @@
         [ctrl.navigationItem setRightBarButtonItem:nil];
     }
     
-    LDJSPluginResult *result = [LDJSPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
-    NSString *jsCallback = [result toSuccessCallbackString:command.callbackId];
+    LDJSPluginResult *result = [LDJSPluginResult resultWithStatus:LDJSCommandStatus_OK messageAsBool:YES];
+    NSString *jsCallback = [result toJsCallbackString:command.callbackId];
     ctrl.jsCallback = jsCallback;
 }
 
@@ -207,7 +206,7 @@
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     //处理alertview
     if(alertView.tag == TAG_ALERTVIEW){
-        LDJSPluginResult *result =  [LDJSPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:buttonIndex],@"button", nil]];
+        LDJSPluginResult *result =  [LDJSPluginResult resultWithStatus:LDJSCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:buttonIndex],@"button", nil]];
         NSString *callBackId = [[NSUserDefaults standardUserDefaults] objectForKey:NOTI_CONFIRMALERT];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:NOTI_CONFIRMALERT];
         [[NSUserDefaults standardUserDefaults] synchronize];

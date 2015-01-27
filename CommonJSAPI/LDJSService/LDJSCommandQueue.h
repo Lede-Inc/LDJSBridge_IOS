@@ -8,20 +8,29 @@
 
 #import <Foundation/Foundation.h>
 
+
 @class LDJSInvokedUrlCommand;
 @class LDJSService;
 
-@interface LDJSCommandQueue : NSObject
+/**
+ * @class LDJSCommandQueue
+ * 用来存储从HTML页面发过来的调用请求命令
+ */
+@interface LDJSCommandQueue : NSObject{
+    
+}
 
-@property (nonatomic, readonly) BOOL currentlyExecuting;
+@property (nonatomic, readonly) BOOL currentlyExecuting; //用于判断当前是否在执行调用请求
 
+/**
+ * 初始化和销毁CommandQueue
+ */
 - (id)initWithService:(LDJSService*) jsService;
 - (void)dispose;
 
-//从识别url中加入参数
--(void) fetchCommandsFromUrl:(NSString *)urlstr;
-- (void)enqueueCommandBatch:(NSString*)batchJSON;
-- (void)executePending;
-- (BOOL)execute:(LDJSInvokedUrlCommand*)command;
+/**
+ * 从webview截获URL并执行
+ */
+-(void)excuteCommandsFromUrl:(NSString *)urlStr;
 
 @end
