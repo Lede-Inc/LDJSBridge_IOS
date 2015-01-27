@@ -266,6 +266,7 @@
 				TargetAttributes = {
 					625A8EE519E78A5C00C0C45C = {
 						CreatedOnToolsVersion = 6.0.1;
+						DevelopmentTeam = 35B2KE884X;
 					};
 					625A8EFE19E78A5D00C0C45C = {
 						CreatedOnToolsVersion = 6.0.1;
@@ -459,9 +460,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CommonJSAPI/CommonJSAPI_Prefix.pch;
 				INFOPLIST_FILE = CommonJSAPI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -471,9 +474,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CommonJSAPI/CommonJSAPI_Prefix.pch;
 				INFOPLIST_FILE = CommonJSAPI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
