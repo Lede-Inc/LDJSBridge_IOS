@@ -63,7 +63,7 @@ static const double MAX_EXECUTION_TIME = .008; // Half of a 60fps frame.
 -(void) excuteCommandsFromUrl:(NSString *)urlstr{
     NSURL *commandURL = [NSURL URLWithString:urlstr];
     NSString *host = commandURL.host;
-    NSArray *paths = commandURL.pathComponents;
+    NSString *pathStr = commandURL.path;
     NSString *query = commandURL.query;
     NSString *fragement = commandURL.fragment;
     
@@ -82,10 +82,13 @@ static const double MAX_EXECUTION_TIME = .008; // Half of a 60fps frame.
     
     //获取调用方法名，规定第一个host为方法名
     NSString *methodShowName = @"";
-    if(paths && paths.count >=2 &&
-       [[paths objectAtIndex:0] isEqualToString:@"/"] &&
-       ![[paths objectAtIndex:1] isEqualToString:@""]){
-        methodShowName = (NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)[paths objectAtIndex:1], CFSTR(""), kCFStringEncodingUTF8));
+    if(pathStr && ![pathStr isEqualToString:@""]){
+        NSArray *paths = [pathStr componentsSeparatedByString:@"/"];
+        if(paths && paths.count >=2  &&
+           [[paths objectAtIndex:0] isEqualToString:@""] &&
+           ![[paths objectAtIndex:1] isEqualToString:@""]){
+            methodShowName = (NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef)[paths objectAtIndex:1], CFSTR(""), kCFStringEncodingUTF8));
+        }
     }
     
     //获取通过URL query对象传进来的参数

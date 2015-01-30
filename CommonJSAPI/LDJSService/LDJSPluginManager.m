@@ -194,6 +194,14 @@
     
     NSString *cacheBridgeFilePath = [[self bridgeCacheDir] stringByAppendingFormat:@"/%@", _coreBridgeJSFileName];
     NSString *bundleBridgeFilePath = [[NSBundle mainBundle] pathForResource:_coreBridgeJSFileName ofType:nil];
+    
+    //debug状态，始终拷贝修改的JS文件
+#ifdef DEBUG
+    if(![fileManager removeItemAtPath:cacheBridgeFilePath error:&error]){
+        NSLog(@"delete cache file error: %@", cacheBridgeFilePath);
+    }
+#endif
+
     //如果cache无此文件
     if(![fileManager fileExistsAtPath:cacheBridgeFilePath]){
         if(![fileManager copyItemAtPath:bundleBridgeFilePath toPath:cacheBridgeFilePath error:&error]){
