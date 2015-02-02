@@ -77,6 +77,6 @@ extern NSString *const JsBridgeServiceTag; //获取Notification的service Tag
  * 调用bridge绑定的webview执行JS代码
  */
 -(void)jsEval:(NSString *)js;
--(NSString *)jsMainLoopEval:(NSString *)js;
+-(NSString *)jsEvalIntrnal:(NSString *)js;
 
 @end

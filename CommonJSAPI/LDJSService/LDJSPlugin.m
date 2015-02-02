@@ -91,7 +91,7 @@
 
 
 - (NSString*)writeJavascript:(NSString*)javascript{
-    return [self.bridgeService jsMainLoopEval:javascript];
+    return [self.bridgeService jsEvalIntrnal:javascript];
 }
 
 @end

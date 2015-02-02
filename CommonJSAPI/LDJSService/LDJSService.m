@@ -24,6 +24,7 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
 
 @interface LDJSService () {
     NSString *_userAgent; //用于记录绑定webview进来的UserAgent
+    NSString *_currentJS; //用于记录阻塞执行的JS
 }
 
 @property (weak, nonatomic) id<UIWebViewDelegate> originDelegate; //记录绑定webView的原始delegate
@@ -103,16 +104,34 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
 
 #pragma mark - 执行JS函数
 -(void)jsEval:(NSString *)js {
-    [self performSelectorOnMainThread:@selector(jsEvalIntrnal:) withObject:js waitUntilDone:YES];
+    if([UIApplication sharedApplication].applicationState == UIApplicationStateActive){
+        [self performSelectorOnMainThread:@selector(jsEvalIntrnal:) withObject:js waitUntilDone:YES];
+    }
+    
+    //wait 唤起应用再执行JS函数，处理微信、微博等通过scheme回调的处理
+    else {
+        _currentJS = js;
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jsEvalFromOtherAppCallBack) name:UIApplicationDidBecomeActiveNotification object:nil];
+    }
 }
 
 
-//直接在主线程中执行
--(NSString *)jsMainLoopEval:(NSString *)js {
-    return [self jsEvalIntrnal:js];
+/**
+ * 从其他app通过scheme回调执行JS
+ */
+-(void) jsEvalFromOtherAppCallBack{
+    if(_currentJS && ![_currentJS isEqualToString:@""]){
+        [self jsEvalIntrnal:_currentJS];
+        _currentJS = nil;
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    }
 }
 
 
+/**
+ * 最后执行主函数
+ */
 -(NSString *)jsEvalIntrnal:(NSString *)js {
     if(self.webView){
         return [self.webView stringByEvaluatingJavaScriptFromString:js];
@@ -120,8 +139,6 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
         return nil;
     }
 }
-
-
 
 #pragma mark - KVO
 -(void)registerKVO {
@@ -161,7 +178,7 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
     if(webView != self.webView) return;
     //加载本地的框架JScode
     NSString *js = [_pluginManager localCoreBridgeJSCode];
-    [self jsMainLoopEval:js];
+    [self jsEvalIntrnal:js];
     [[NSNotificationCenter defaultCenter] postNotificationName:LDJSBridgeWebFinishLoadNotification object:self];
     
     if([self.originDelegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
