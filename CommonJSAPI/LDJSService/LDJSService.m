@@ -105,7 +105,7 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
 #pragma mark - 执行JS函数
 -(void)jsEval:(NSString *)js {
     if([UIApplication sharedApplication].applicationState == UIApplicationStateActive){
-        [self performSelectorOnMainThread:@selector(jsEvalIntrnal:) withObject:js waitUntilDone:YES];
+        [self performSelectorOnMainThread:@selector(jsEvalIntrnal:) withObject:js waitUntilDone:NO];
     }
     
     //wait 唤起应用再执行JS函数，处理微信、微博等通过scheme回调的处理

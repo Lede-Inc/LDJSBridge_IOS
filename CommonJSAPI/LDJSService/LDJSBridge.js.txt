@@ -432,13 +432,15 @@ mapp.build("mapp.ui.openUrl", {
     }
 }),
 mapp.build("mapp.ui.openView", {
-	iOS: function(t) {
-		typeof t.onclose == "function" && (t.onclose = mapp.callback(t.onclose)),
-		mapp.invoke("nav", "openViewController", t)
+	iOS: function(e,t) {
+        e = e || {},
+        e.callback = mapp.callback(t),
+		mapp.invoke("nav", "openViewController", e)
 	},
-	android: function(e) {
-		typeof e.onclose == "function" && (e.onclose = mapp.callback(e.onclose)),
-		mapp.invoke("nav", "openView", e)
+    android: function(e,t) {
+        e = e || {},
+        e.callback = mapp.callback(t),
+        mapp.invoke("nav", "openViewController", e)
 	},
 	support: {
 		iOS: "1.0",

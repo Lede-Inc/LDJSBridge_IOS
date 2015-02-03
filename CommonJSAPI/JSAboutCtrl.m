@@ -14,8 +14,15 @@
     self = [super init];
     if(self){
         self.navigationItem.title = title;
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
     }
     return self;
+}
+
+-(void)cancel{
+    [self dismissViewControllerAnimated:YES completion:^(){
+        [self.delegate cancel];
+    }];
 }
 
 -(void) viewDidLoad {

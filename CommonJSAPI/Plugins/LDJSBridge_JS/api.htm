@@ -159,10 +159,11 @@ function getUICtrl(type, n){
 			break;
 		case 2: 
 			mapp.ui.openView({
-				name: "about", 
-				options: {"title": "js标题"}, 
-				onclose: function(data){ alert(data) }
-			});
+                    name: "about",
+                    options: {"title": "js标题"}
+                }, function(data){
+                             alert(data);
+                });
 			break;
 		case 3:
 			mapp.ui.popBack();

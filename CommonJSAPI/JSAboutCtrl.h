@@ -8,10 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol JSAboutCtrlDelegate <NSObject>
+-(void)cancel;
+@end
+
 @interface JSAboutCtrl : UIViewController {
     
 }
 
+@property (nonatomic, assign) id<JSAboutCtrlDelegate> delegate;
 -(id)initWithTitle:(NSString *) title;
+
 
 @end

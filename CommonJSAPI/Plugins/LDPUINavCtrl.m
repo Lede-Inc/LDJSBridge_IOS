@@ -15,8 +15,8 @@
 #define NOTI_CONFIRMALERT @"LDPlugin_AlertView"
 
 
-@interface LDPUINavCtrl () <UIAlertViewDelegate>{
-    
+@interface LDPUINavCtrl () <UIAlertViewDelegate, JSAboutCtrlDelegate>{
+    LDJSInvokedUrlCommand *_cacheCommand;
 }
 
 @end
@@ -84,11 +84,24 @@
     if(viewCtrlName && ![viewCtrlName isEqualToString:@""]){
         NSString *viewClass = [ENABLE_VIEWS objectForKey:[viewCtrlName lowercaseString]];
         if(viewCtrlName != nil) {
-            UIViewController *viewCtrl = [[NSClassFromString(viewClass) alloc] initWithTitle:[dic_options objectForKey:@"title"]];
-            [self.viewController.navigationController pushViewController:viewCtrl animated:YES];
+            JSAboutCtrl *viewCtrl = (JSAboutCtrl *)[[NSClassFromString(viewClass) alloc] initWithTitle:[dic_options objectForKey:@"title"]];
+            viewCtrl.delegate =self;
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewCtrl];
+            [self.viewController presentViewController:nav animated:YES completion:^(){
+                _cacheCommand = command;
+            }];
+            
+            //[self.viewController.navigationController pushViewController:viewCtrl animated:YES];
         }
     }
-    
+}
+
+
+-(void)cancel{
+    if(_cacheCommand != nil ){
+        LDJSPluginResult *result = [LDJSPluginResult resultWithStatus:LDJSCommandStatus_OK messageAsInt:1];
+        [self.commandDelegate sendPluginResult:result callbackId:_cacheCommand.callbackId];
+    }
 }
 
 
