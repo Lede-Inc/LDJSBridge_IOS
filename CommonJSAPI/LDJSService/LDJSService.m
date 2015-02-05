@@ -144,8 +144,15 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
 
 
 #pragma mark webViewDelegate monitor
+/**
+ * 由于前端有时需要在document.ready调用JSBridge，所以在页面加载之前加载核心JS即可保证
+ */
 - (void)webViewDidStartLoad:(UIWebView *)webView {
     if(webView != self.webView) return;
+    //加载本地的框架JScode
+    NSString *js = [_pluginManager localCoreBridgeJSCode];
+    [self jsEvalIntrnal:js];
+    [[NSNotificationCenter defaultCenter] postNotificationName:LDJSBridgeWebFinishLoadNotification object:self];
     if([self.originDelegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
         [self.originDelegate webViewDidStartLoad:webView];
     }
@@ -154,11 +161,6 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     if(webView != self.webView) return;
-    //加载本地的框架JScode
-    NSString *js = [_pluginManager localCoreBridgeJSCode];
-    [self jsEvalIntrnal:js];
-    [[NSNotificationCenter defaultCenter] postNotificationName:LDJSBridgeWebFinishLoadNotification object:self];
-    
     if([self.originDelegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
         [self.originDelegate webViewDidFinishLoad:webView];
     }
