@@ -28,9 +28,33 @@
 -(id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if(self){
+        UIBarButtonItem *refreshItem = [[UIBarButtonItem alloc] initWithTitle:@"刷新" style:UIBarButtonItemStylePlain target:self action:@selector(refresh)];
+        UIBarButtonItem *forwardItem = [[UIBarButtonItem alloc] initWithTitle:@"前进" style:UIBarButtonItemStylePlain target:self action:@selector(forward)];
+        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"后退" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
+        self.navigationItem.rightBarButtonItems = @[backItem, forwardItem, refreshItem];
     }
     return self;
 }
+
+
+-(void) refresh{
+    if(_webview){
+        [_bridgeService jsEvalIntrnal:@"javascript:window.location.reload()"];
+    }
+}
+
+-(void) forward{
+    if([_webview canGoForward]){
+        [_webview goForward];
+    }
+}
+
+-(void) back {
+    if([_webview canGoBack]){
+        [_webview goBack];
+    }
+}
+
 
 #pragma mark navigationItem-Control
 -(void)setNavigationRightBtnWithType:(int)type andTitle:(NSString *)title{
@@ -167,6 +191,9 @@
  */
 - (void)webViewDidFinishLoad:(UIWebView*)theWebView{
     NSLog(@"Finished load of: %@", theWebView.request.URL);
+    //当webview finish load之后，发event事件通知前端JSBridgeService已经就绪
+    //监听事件由各个产品自行决定
+    [_bridgeService readyWithEvent:@"LDJSBridgeServiceReady"];
 }
 
 - (void)webView:(UIWebView*)theWebView didFailLoadWithError:(NSError*)error{

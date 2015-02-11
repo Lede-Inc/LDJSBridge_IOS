@@ -101,6 +101,13 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
 }
 
 
+-(void)readyWithEvent:(NSString *)eventName{
+    //加载结束核心JS结束之后通知前端
+    NSString *jsReady = [NSString stringWithFormat:@"mapp.execPatchEvent('%@');", eventName];
+    [self jsEvalIntrnal:jsReady];
+}
+
+
 #pragma mark - 执行JS函数
 -(void)jsEval:(NSString *)js {
     [self performSelectorOnMainThread:@selector(jsEvalIntrnal:) withObject:js waitUntilDone:NO];

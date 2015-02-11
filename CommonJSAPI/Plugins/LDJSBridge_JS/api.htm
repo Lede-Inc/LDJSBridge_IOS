@@ -12,6 +12,7 @@
     </style>
 </head>
 <body style="background: #fff">
+    <span id="log"></span>
 	<h1 class="text-center">Mobile JS API Demo</h1>
 	<div id="container" class="container">
 	</div>
@@ -59,12 +60,15 @@
 	<script src="./zepto.js"></script>
 <script>
 
-$(document).ready(function() {
-    
-});
+document.addEventListener("LDJSBridgeServiceReady", function(){
+      $('#log').append("event-start<br/>");
+      mapp.device.getClientInfo(function(data){
+                $('#log').append("before callback<br/>");
+                $('#log').append(JSON.stringify(data)+"<br/>");
+     });
+     $('#log').append("event-end");
+}, false);
 
-
-    
 function mappEnv() {
    alert(JSON.stringify(mapp));
 }

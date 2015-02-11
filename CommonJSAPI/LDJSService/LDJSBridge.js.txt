@@ -182,14 +182,17 @@ function(e) {
 			//执行生成的url, 有些函数是同步执行完毕，直接调用回调函数；而有些函数的调用要通过异步调用执行，需要通过
 			//全局调用去完成；
    		    var f = N(o);
-            if (t.iOS) {
-                f = f ? f.result: null;
-                if (!s) return f; //如果无回调函数，直接返回结果；
-                w(u, [f], !1, !0) //如果有回调函数，执行w函数；
-            }
         }else {
 			console.log("mappapi: the version don't support mapp." + e + "." + n);
 		}
+    }
+
+
+    //当本地jsbridge初始化完成，调用此方法告诉前端jsbridge已经初始化完毕
+    function _execPatchEvent(type){
+        var ev = document.createEvent('Event');
+        ev.initEvent(type, true, true);
+        document.dispatchEvent(ev);
     }
    
 	var t = {},
@@ -228,6 +231,7 @@ function(e) {
     t.invoke = k,
     t.callback = y,
     t.execGlobalCallback = E,
+    t.execPatchEvent = _execPatchEvent,
     t
 }),
 mapp.build("mapp.device.isMobileApp", {

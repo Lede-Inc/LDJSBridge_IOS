@@ -66,6 +66,13 @@ extern NSString *const JsBridgeServiceTag; //获取Notification的service Tag
 
 
 /**
+ * 通知前端JSBridgeService已经准备就绪
+ */
+-(void)readyWithEvent:(NSString *)eventName;
+
+
+
+/**
  * 1.根据pluginName 获取plugin的实例
  * 2.根据pluginShowMethod获取对应的SEL
  */
