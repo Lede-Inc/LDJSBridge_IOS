@@ -39,7 +39,7 @@
 
 -(void) refresh{
     if(_webview){
-        [_bridgeService jsEvalIntrnal:@"javascript:window.location.reload()"];
+        [_webview reload];
     }
 }
 
@@ -203,7 +203,7 @@
 - (BOOL)webView:(UIWebView*)theWebView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType
 {
     NSURL* url = [request URL];
-    NSLog(@"url:::::%@", [url absoluteString]);    
+    NSLog(@"url:::::%@", [url absoluteString]);
     return YES;
 }
 

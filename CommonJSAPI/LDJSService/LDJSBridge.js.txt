@@ -182,6 +182,10 @@ function(e) {
 			//执行生成的url, 有些函数是同步执行完毕，直接调用回调函数；而有些函数的调用要通过异步调用执行，需要通过
 			//全局调用去完成；
    		    var f = N(o);
+            if (t.iOS) {
+                f = f ? f.result: null;
+                if (!s) return f; //如果无回调函数，直接返回结果；
+            }
         }else {
 			console.log("mappapi: the version don't support mapp." + e + "." + n);
 		}

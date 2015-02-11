@@ -156,10 +156,6 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
  */
 - (void)webViewDidStartLoad:(UIWebView *)webView {
     if(webView != self.webView) return;
-    //加载本地的框架JScode
-    NSString *js = [_pluginManager localCoreBridgeJSCode];
-    [self jsEvalIntrnal:js];
-    [[NSNotificationCenter defaultCenter] postNotificationName:LDJSBridgeWebFinishLoadNotification object:self];
     if([self.originDelegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
         [self.originDelegate webViewDidStartLoad:webView];
     }
@@ -168,6 +164,11 @@ NSString *const JsBridgeServiceTag = @"ldjsbridgeservice";
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     if(webView != self.webView) return;
+    //加载本地的框架JScode
+    NSString *js = [_pluginManager localCoreBridgeJSCode];
+    [self jsEvalIntrnal:js];
+    [[NSNotificationCenter defaultCenter] postNotificationName:LDJSBridgeWebFinishLoadNotification object:self];
+    
     if([self.originDelegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
         [self.originDelegate webViewDidFinishLoad:webView];
     }

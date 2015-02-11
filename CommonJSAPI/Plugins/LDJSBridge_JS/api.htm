@@ -61,12 +61,13 @@
 <script>
 
 document.addEventListener("LDJSBridgeServiceReady", function(){
-      $('#log').append("event-start<br/>");
+      //$('#log').append("event-start<br/>");
       mapp.device.getClientInfo(function(data){
-                $('#log').append("before callback<br/>");
-                $('#log').append(JSON.stringify(data)+"<br/>");
+                //$('#log').append("before callback<br/>");
+                //$('#log').append(JSON.stringify(data)+"<br/>");
+                alert(JSON.stringify(data));
      });
-     $('#log').append("event-end");
+     //$('#log').append("event-end");
 }, false);
 
 function mappEnv() {
