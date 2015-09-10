@@ -180,12 +180,12 @@
 				6231946D19EBA6FB007FF59D /* LDPlugins */,
 				625A8EED19E78A5D00C0C45C /* AppDelegate.h */,
 				625A8EEE19E78A5D00C0C45C /* AppDelegate.m */,
+				624DE58E19EFC6120029A225 /* JSAboutCtrl.h */,
+				624DE58F19EFC6120029A225 /* JSAboutCtrl.m */,
 				625A8EF319E78A5D00C0C45C /* Main.storyboard */,
 				625A8EF619E78A5D00C0C45C /* Images.xcassets */,
 				625A8EF819E78A5D00C0C45C /* LaunchScreen.xib */,
 				625A8EE919E78A5D00C0C45C /* Supporting Files */,
-				624DE58E19EFC6120029A225 /* JSAboutCtrl.h */,
-				624DE58F19EFC6120029A225 /* JSAboutCtrl.m */,
 			);
 			path = CommonJSAPI;
 			sourceTree = "<group>";
