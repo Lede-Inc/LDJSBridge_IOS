@@ -1,5 +1,5 @@
 {
-    "update": "http://dynamic.163.com/jsbridge/LDJSBridge.js.txt",
+    "update": "",
     "module": "mapp",
     "plugins": [
         {

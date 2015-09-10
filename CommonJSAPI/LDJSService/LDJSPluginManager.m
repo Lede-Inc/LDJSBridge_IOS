@@ -194,22 +194,30 @@
     
     NSString *cacheBridgeFilePath = [[self bridgeCacheDir] stringByAppendingFormat:@"/%@", _coreBridgeJSFileName];
     NSString *bundleBridgeFilePath = [[NSBundle mainBundle] pathForResource:_coreBridgeJSFileName ofType:nil];
-    
-    //debug状态，始终拷贝修改的JS文件
+
+    //如果配置了在线更新地址，则从更新地址更新JSBridge的核心和插件JS
+    if(_updateUrl != nil && ![_updateUrl isEqualToString:@""]){
+        //debug状态，始终拷贝修改的JS文件
 #ifdef DEBUG
-    if(![fileManager removeItemAtPath:cacheBridgeFilePath error:&error]){
-        NSLog(@"delete cache file error: %@", cacheBridgeFilePath);
-    }
+        if(![fileManager removeItemAtPath:cacheBridgeFilePath error:&error]){
+            NSLog(@"delete cache file error: %@", cacheBridgeFilePath);
+        }
 #endif
 
-    //如果cache无此文件
-    if(![fileManager fileExistsAtPath:cacheBridgeFilePath]){
-        if(![fileManager copyItemAtPath:bundleBridgeFilePath toPath:cacheBridgeFilePath error:&error]){
-            NSLog(@"copy error: %@", cacheBridgeFilePath);
+        //如果cache无此文件
+        if(![fileManager fileExistsAtPath:cacheBridgeFilePath]){
+            if(![fileManager copyItemAtPath:bundleBridgeFilePath toPath:cacheBridgeFilePath error:&error]){
+                NSLog(@"copy error: %@", cacheBridgeFilePath);
+            }
         }
+        
+        jsBrideCodeStr = [NSString stringWithContentsOfFile:cacheBridgeFilePath encoding:NSUTF8StringEncoding error:nil];
     }
-    
-    jsBrideCodeStr = [NSString stringWithContentsOfFile:cacheBridgeFilePath encoding:NSUTF8StringEncoding error:nil];
+
+    //如果未配置，则直接从本地读取
+    else {
+        jsBrideCodeStr = [NSString stringWithContentsOfFile:bundleBridgeFilePath encoding:NSUTF8StringEncoding error:nil];
+    }
     return jsBrideCodeStr;
 }
 
