@@ -12,9 +12,10 @@
 
 @implementation NSArray (LDJSBridgeJSONSerializing)
 
-- (NSString*)cdv_JSONString{
-    NSError* error = nil;
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:self
+- (NSString *)cdv_JSONString
+{
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:&error];
 
@@ -29,13 +30,12 @@
 @end
 
 
-
-
 @implementation NSDictionary (LDJSBridgeJSONSerializing)
 
-- (NSString*)cdv_JSONString{
-    NSError* error = nil;
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:self
+- (NSString *)cdv_JSONString
+{
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:&error];
 
@@ -50,15 +50,15 @@
 @end
 
 
-
-
 @implementation NSString (LDJSBridgeJSONSerializing)
 
-- (id)cdv_JSONObject{
-    NSError* error = nil;
-    id object = [NSJSONSerialization JSONObjectWithData:[self dataUsingEncoding:NSUTF8StringEncoding]
-                                                options:NSJSONReadingMutableContainers
-                                                  error:&error];
+- (id)cdv_JSONObject
+{
+    NSError *error = nil;
+    id object =
+        [NSJSONSerialization JSONObjectWithData:[self dataUsingEncoding:NSUTF8StringEncoding]
+                                        options:NSJSONReadingMutableContainers
+                                          error:&error];
 
     if (error != nil) {
         NSLog(@"NSString JSONObject error: %@", [error localizedDescription]);

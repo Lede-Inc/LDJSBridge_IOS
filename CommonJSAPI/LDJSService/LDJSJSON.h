@@ -8,11 +8,11 @@
 
 
 @interface NSArray (LDJSBridgeJSONSerializing)
-- (NSString*)cdv_JSONString;
+- (NSString *)cdv_JSONString;
 @end
 
 @interface NSDictionary (LDJSBridgeJSONSerializing)
-- (NSString*)cdv_JSONString;
+- (NSString *)cdv_JSONString;
 @end
 
 @interface NSString (LDJSBridgeJSONSerializing)

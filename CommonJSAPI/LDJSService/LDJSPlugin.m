@@ -12,43 +12,58 @@
 @implementation LDJSPlugin
 
 // Do not override these methods. Use pluginInitialize instead.
--(id)init{
+- (id)init
+{
     self = [super init];
-    if(self){
+    if (self) {
         _bridgeService = nil;
         _isReady = NO;
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConnect:) name:LDJSBridgeConnectNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onClose:) name:LDJSBridgeCloseNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onWebViewFinishLoad:) name:LDJSBridgeWebFinishLoadNotification object:nil];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onConnect:)
+                                                     name:LDJSBridgeConnectNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onClose:)
+                                                     name:LDJSBridgeCloseNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onWebViewFinishLoad:)
+                                                     name:LDJSBridgeWebFinishLoadNotification
+                                                   object:nil];
     }
     return self;
 }
 
 
-- (void)dealloc{
+- (void)dealloc
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
-- (void)pluginInitialize{
-    
+- (void)pluginInitialize
+{
 }
 
 
--(void)stopPlugin{
+- (void)stopPlugin
+{
     self.bridgeService = nil;
     self.isReady = NO;
 }
 
 
-- (void)onConnect:(NSNotification *)notification {
-    if(!self.bridgeService) self.bridgeService = [notification.userInfo objectForKey:JsBridgeServiceTag];
+- (void)onConnect:(NSNotification *)notification
+{
+    if (!self.bridgeService)
+        self.bridgeService = [notification.userInfo objectForKey:JsBridgeServiceTag];
 }
 
 
--(UIViewController *)viewController {
-    if(self.bridgeService){
+- (UIViewController *)viewController
+{
+    if (self.bridgeService) {
         return (UIViewController *)self.bridgeService.viewController;
     } else {
         NSAssert(NO, @"the bridge Service is not connected");
@@ -56,8 +71,9 @@
     }
 }
 
--(UIWebView *)webView{
-    if(self.bridgeService){
+- (UIWebView *)webView
+{
+    if (self.bridgeService) {
         return (UIWebView *)self.bridgeService.webView;
     } else {
         NSAssert(NO, @"the bridge Service is not connected");
@@ -65,8 +81,9 @@
     }
 }
 
--(id<LDJSCommandDelegate>)commandDelegate{
-    if(self.bridgeService){
+- (id<LDJSCommandDelegate>)commandDelegate
+{
+    if (self.bridgeService) {
         return self.bridgeService.commandDelegate;
     } else {
         NSAssert(NO, @"the bridge Service is not connected");
@@ -75,24 +92,26 @@
 }
 
 
-- (void)onClose:(NSNotification *)notification {
-    if(self.bridgeService && self.bridgeService == notification.object) {
+- (void)onClose:(NSNotification *)notification
+{
+    if (self.bridgeService && self.bridgeService == notification.object) {
         self.bridgeService = nil;
         self.isReady = NO;
         [self stopPlugin];
     }
 }
 
-- (void)onWebViewFinishLoad:(NSNotification *)notification {
-    if(self.bridgeService && self.bridgeService == notification.object) {
+- (void)onWebViewFinishLoad:(NSNotification *)notification
+{
+    if (self.bridgeService && self.bridgeService == notification.object) {
         self.isReady = YES;
     }
 }
 
 
-- (NSString*)writeJavascript:(NSString*)javascript{
+- (NSString *)writeJavascript:(NSString *)javascript
+{
     return [self.bridgeService jsEvalIntrnal:javascript];
 }
 
 @end
-

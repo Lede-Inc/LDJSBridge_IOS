@@ -14,25 +14,22 @@
 /**
  * 将执行native的结果封装并通过callBackId进行JS回调
  */
-- (void)sendPluginResult:(LDJSPluginResult*)result callbackId:(NSString*)callbackId;
+- (void)sendPluginResult:(LDJSPluginResult *)result callbackId:(NSString *)callbackId;
 
 
 @end
-
-
 
 
 /**
  * @protocol LDJSCommandDelegate
  * 执行URLCommand的回调
  */
-@interface LDJSCommandDelegateImpl : NSObject<LDJSCommandDelegate>{
-    
+@interface LDJSCommandDelegateImpl : NSObject <LDJSCommandDelegate> {
 }
 
 /**
  * 初始化Command回调
  */
-- (id)initWithService:(LDJSService*)jsService;
+- (id)initWithService:(LDJSService *)jsService;
 
 @end

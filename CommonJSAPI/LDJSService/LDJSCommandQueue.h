@@ -16,21 +16,20 @@
  * @class LDJSCommandQueue
  * 用来存储从HTML页面发过来的调用请求命令
  */
-@interface LDJSCommandQueue : NSObject{
-    
+@interface LDJSCommandQueue : NSObject {
 }
 
-@property (nonatomic, readonly) BOOL currentlyExecuting; //用于判断当前是否在执行调用请求
+@property (nonatomic, readonly) BOOL currentlyExecuting;  //用于判断当前是否在执行调用请求
 
 /**
  * 初始化和销毁CommandQueue
  */
-- (id)initWithService:(LDJSService*) jsService;
+- (id)initWithService:(LDJSService *)jsService;
 - (void)dispose;
 
 /**
  * 从webview截获URL并执行
  */
--(void)excuteCommandsFromUrl:(NSString *)urlStr;
+- (void)excuteCommandsFromUrl:(NSString *)urlStr;
 
 @end
