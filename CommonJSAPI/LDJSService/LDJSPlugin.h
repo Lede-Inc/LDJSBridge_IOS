@@ -21,8 +21,8 @@
 @class LDJSService;
 @interface LDJSPlugin : NSObject {
 }
-@property (weak, nonatomic)
-    LDJSService *bridgeService;  //在bridgeService中提供对webview和controller的访问
+//在bridgeService中提供对webview和controller的访问
+@property (weak, nonatomic) LDJSService *bridgeService;
 @property (assign, nonatomic) UIViewController *viewController;
 @property (assign, nonatomic) UIWebView *webView;
 @property (assign, nonatomic) id<LDJSCommandDelegate> commandDelegate;
